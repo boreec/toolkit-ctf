@@ -23,12 +23,36 @@ pub mod primality_test_algorithms {
             return true;
         }
     }
+
+    pub struct NaiveHalfDivision;
+
+    impl super::PrimalityTest for NaiveHalfDivision {
+        fn is_prime(n: u64) -> bool {
+            if n <= 1 {
+                return false;
+            }
+            if n == 2 || n == 3 {
+                return true;
+            }
+
+            for i in 2..=(n / 2) {
+                if n % i == 0 {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::primality_test_algorithms::*;
     use super::*;
+
+    const KNOWN_PRIMES: Vec<u64> = vec![2, 3, 5, 7, 11, 13, 17, 19, 23];
+
     #[test]
     fn test_naive_division() {
         assert_eq!(NaiveDivision::is_prime(2), true);
