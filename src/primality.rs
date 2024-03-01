@@ -3,7 +3,7 @@ pub trait PrimalityTest {
 }
 
 pub mod primality_test_algorithms {
-    pub enum NaiveTrialDivisionUpperBound {
+    pub enum DivisionUpperBound {
         Whole,
         Half,
         Square,
@@ -11,7 +11,7 @@ pub mod primality_test_algorithms {
 
     pub struct NaiveTrialDivision {
         pub increment: u64,
-        pub upper_bound: NaiveTrialDivisionUpperBound,
+        pub upper_bound: DivisionUpperBound,
     }
 
     impl super::PrimalityTest for NaiveTrialDivision {
@@ -26,11 +26,9 @@ pub mod primality_test_algorithms {
 
             let mut i = 3;
             let upper_bound = match self.upper_bound {
-                NaiveTrialDivisionUpperBound::Whole => n,
-                NaiveTrialDivisionUpperBound::Half => n / 2 + 1,
-                NaiveTrialDivisionUpperBound::Square => {
-                    (n as f64).sqrt() as u64 + 1
-                }
+                DivisionUpperBound::Whole => n,
+                DivisionUpperBound::Half => n / 2 + 1,
+                DivisionUpperBound::Square => (n as f64).sqrt() as u64 + 1,
             };
 
             while i < upper_bound && n % i != 0 {
@@ -38,6 +36,47 @@ pub mod primality_test_algorithms {
             }
 
             i >= upper_bound
+        }
+    }
+
+    pub struct SixKOneDivision {
+        pub upper_bound: DivisionUpperBound,
+    }
+
+    impl super::PrimalityTest for SixKOneDivision {
+        fn is_prime(&self, n: u64) -> bool {
+            if n == 2 || n == 3 {
+                return true;
+            }
+
+            if n <= 1 || n % 2 == 0 || n % 3 == 0 {
+                return false;
+            }
+
+            let upper_bound = match self.upper_bound {
+                DivisionUpperBound::Whole => n,
+                DivisionUpperBound::Half => n / 2 + 1,
+                DivisionUpperBound::Square => (n as f64).sqrt() as u64 + 1,
+            };
+
+            let mut k1 = 5;
+            let mut k2 = 7;
+
+            while (k1 <= upper_bound || k2 <= upper_bound)
+                && n % k1 != 0
+                && n % k2 != 0
+            {
+                k1 = k1 + 6;
+                k2 = k2 + 6;
+            }
+
+            if k1 < upper_bound && k2 < upper_bound {
+                return false;
+            }
+
+            return n % k1 == 0
+                || n % k2 == 0
+                || (k1 >= upper_bound && k2 >= upper_bound);
         }
     }
 }
@@ -61,7 +100,7 @@ mod tests {
     fn test_whole_naive_trial_division_increment_by_one() {
         let ntd = NaiveTrialDivision {
             increment: 1,
-            upper_bound: NaiveTrialDivisionUpperBound::Whole,
+            upper_bound: DivisionUpperBound::Whole,
         };
 
         for p in PRIMES_TO_100 {
@@ -77,7 +116,7 @@ mod tests {
     fn test_whole_naive_trial_division_increment_by_two() {
         let ntd = NaiveTrialDivision {
             increment: 2,
-            upper_bound: NaiveTrialDivisionUpperBound::Whole,
+            upper_bound: DivisionUpperBound::Whole,
         };
 
         for p in PRIMES_TO_100 {
@@ -93,7 +132,7 @@ mod tests {
     fn test_half_naive_trial_division_increment_by_one() {
         let ntd = NaiveTrialDivision {
             increment: 1,
-            upper_bound: NaiveTrialDivisionUpperBound::Half,
+            upper_bound: DivisionUpperBound::Half,
         };
 
         for p in PRIMES_TO_100 {
@@ -109,7 +148,7 @@ mod tests {
     fn test_half_naive_trial_division_increment_by_two() {
         let ntd = NaiveTrialDivision {
             increment: 2,
-            upper_bound: NaiveTrialDivisionUpperBound::Half,
+            upper_bound: DivisionUpperBound::Half,
         };
 
         for p in PRIMES_TO_100 {
@@ -125,7 +164,7 @@ mod tests {
     fn test_square_naive_trial_division_increment_by_one() {
         let ntd = NaiveTrialDivision {
             increment: 1,
-            upper_bound: NaiveTrialDivisionUpperBound::Square,
+            upper_bound: DivisionUpperBound::Square,
         };
 
         for p in PRIMES_TO_100 {
@@ -141,7 +180,7 @@ mod tests {
     fn test_square_naive_trial_division_increment_by_two() {
         let ntd = NaiveTrialDivision {
             increment: 2,
-            upper_bound: NaiveTrialDivisionUpperBound::Square,
+            upper_bound: DivisionUpperBound::Square,
         };
 
         for p in PRIMES_TO_100 {
@@ -150,6 +189,51 @@ mod tests {
 
         for p in NOT_PRIMES {
             assert_eq!(ntd.is_prime(*p), false);
+        }
+    }
+
+    #[test]
+    fn test_whole_six_k_one_division() {
+        let skod = SixKOneDivision {
+            upper_bound: DivisionUpperBound::Whole,
+        };
+
+        for p in PRIMES_TO_100 {
+            assert_eq!(skod.is_prime(*p), true);
+        }
+
+        for p in NOT_PRIMES {
+            assert_eq!(skod.is_prime(*p), false);
+        }
+    }
+
+    #[test]
+    fn test_half_six_k_one_division() {
+        let skod = SixKOneDivision {
+            upper_bound: DivisionUpperBound::Half,
+        };
+
+        for p in PRIMES_TO_100 {
+            assert_eq!(skod.is_prime(*p), true);
+        }
+
+        for p in NOT_PRIMES {
+            assert_eq!(skod.is_prime(*p), false);
+        }
+    }
+
+    #[test]
+    fn test_square_six_k_one_division() {
+        let skod = SixKOneDivision {
+            upper_bound: DivisionUpperBound::Square,
+        };
+
+        for p in PRIMES_TO_100 {
+            assert_eq!(skod.is_prime(*p), true);
+        }
+
+        for p in NOT_PRIMES {
+            assert_eq!(skod.is_prime(*p), false);
         }
     }
 }
