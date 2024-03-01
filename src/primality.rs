@@ -51,27 +51,24 @@ mod tests {
     use super::primality_test_algorithms::*;
     use super::*;
 
-    const KNOWN_PRIMES: Vec<u64> = vec![2, 3, 5, 7, 11, 13, 17, 19, 23];
+    const PRIMES_TO_100: &[u64] = &[
+        2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67,
+        71, 73, 79, 83, 89, 97,
+    ];
+
+    const NOT_PRIMES: &[u64] = &[
+        0, 1, 4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25, 26, 27,
+        28, 30, 32, 33, 34, 35,
+    ];
 
     #[test]
     fn test_naive_division() {
-        assert_eq!(NaiveDivision::is_prime(2), true);
-        assert_eq!(NaiveDivision::is_prime(3), true);
-        assert_eq!(NaiveDivision::is_prime(5), true);
-        assert_eq!(NaiveDivision::is_prime(7), true);
-        assert_eq!(NaiveDivision::is_prime(11), true);
-        assert_eq!(NaiveDivision::is_prime(13), true);
-        assert_eq!(NaiveDivision::is_prime(17), true);
-        assert_eq!(NaiveDivision::is_prime(19), true);
-        assert_eq!(NaiveDivision::is_prime(23), true);
+        for p in PRIMES_TO_100 {
+            assert_eq!(NaiveDivision::is_prime(*p), true);
+        }
 
-        assert_eq!(NaiveDivision::is_prime(0), false);
-        assert_eq!(NaiveDivision::is_prime(1), false);
-        assert_eq!(NaiveDivision::is_prime(4), false);
-        assert_eq!(NaiveDivision::is_prime(6), false);
-        assert_eq!(NaiveDivision::is_prime(8), false);
-        assert_eq!(NaiveDivision::is_prime(9), false);
-        assert_eq!(NaiveDivision::is_prime(22), false);
-        assert_eq!(NaiveDivision::is_prime(14), false);
+        for p in NOT_PRIMES {
+            assert_eq!(NaiveDivision::is_prime(*p), false);
+        }
     }
 }
