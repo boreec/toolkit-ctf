@@ -16,18 +16,18 @@ pub mod primality_test_algorithms {
 
     impl super::PrimalityTest for NaiveTrialDivision {
         fn is_prime(&self, n: u64) -> bool {
-            if n <= 1 || n == 4 {
-                return false;
-            }
-
             if n == 2 || n == 3 || n == 5 {
                 return true;
+            }
+
+            if n <= 1 || n % 2 == 0 || n % 3 == 0 {
+                return false;
             }
 
             let mut i = 3;
             let upper_bound = match self.upper_bound {
                 NaiveTrialDivisionUpperBound::Whole => n,
-                NaiveTrialDivisionUpperBound::Half => n / 2,
+                NaiveTrialDivisionUpperBound::Half => n / 2 + 1,
                 NaiveTrialDivisionUpperBound::Square => {
                     (n as f64).sqrt() as u64
                 }
@@ -37,7 +37,7 @@ pub mod primality_test_algorithms {
                 i = i + self.increment
             }
 
-            i == upper_bound
+            i >= upper_bound
         }
     }
 }
@@ -78,6 +78,38 @@ mod tests {
         let ntd = NaiveTrialDivision {
             increment: 2,
             upper_bound: NaiveTrialDivisionUpperBound::Whole,
+        };
+
+        for p in PRIMES_TO_100 {
+            assert_eq!(ntd.is_prime(*p), true);
+        }
+
+        for p in NOT_PRIMES {
+            assert_eq!(ntd.is_prime(*p), false);
+        }
+    }
+
+    #[test]
+    fn test_half_naive_trial_division_increment_by_one() {
+        let ntd = NaiveTrialDivision {
+            increment: 1,
+            upper_bound: NaiveTrialDivisionUpperBound::Half,
+        };
+
+        for p in PRIMES_TO_100 {
+            assert_eq!(ntd.is_prime(*p), true);
+        }
+
+        for p in NOT_PRIMES {
+            assert_eq!(ntd.is_prime(*p), false);
+        }
+    }
+
+    #[test]
+    fn test_half_naive_trial_division_increment_by_two() {
+        let ntd = NaiveTrialDivision {
+            increment: 2,
+            upper_bound: NaiveTrialDivisionUpperBound::Half,
         };
 
         for p in PRIMES_TO_100 {
