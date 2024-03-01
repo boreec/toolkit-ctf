@@ -1,47 +1,43 @@
 pub trait PrimalityTest {
-    fn is_prime(n: u64) -> bool;
+    fn is_prime(&self, n: u64) -> bool;
 }
 
 pub mod primality_test_algorithms {
-    pub struct NaiveDivision;
-
-    impl super::PrimalityTest for NaiveDivision {
-        fn is_prime(n: u64) -> bool {
-            if n <= 1 {
-                return false;
-            }
-            if n == 2 {
-                return true;
-            }
-
-            for i in 2..n {
-                if n % i == 0 {
-                    return false;
-                }
-            }
-
-            return true;
-        }
+    pub enum NaiveTrialDivisionUpperBound {
+        Whole,
+        Half,
+        Square,
     }
 
-    pub struct NaiveHalfDivision;
+    pub struct NaiveTrialDivision {
+        pub increment: u64,
+        pub upper_bound: NaiveTrialDivisionUpperBound,
+    }
 
-    impl super::PrimalityTest for NaiveHalfDivision {
-        fn is_prime(n: u64) -> bool {
-            if n <= 1 {
+    impl super::PrimalityTest for NaiveTrialDivision {
+        fn is_prime(&self, n: u64) -> bool {
+            if n <= 1 || n == 4 {
                 return false;
             }
-            if n == 2 || n == 3 {
+
+            if n == 2 || n == 3 || n == 5 {
                 return true;
             }
 
-            for i in 2..=(n / 2) {
-                if n % i == 0 {
-                    return false;
+            let mut i = 3;
+            let upper_bound = match self.upper_bound {
+                NaiveTrialDivisionUpperBound::Whole => n,
+                NaiveTrialDivisionUpperBound::Half => n / 2,
+                NaiveTrialDivisionUpperBound::Square => {
+                    (n as f64).sqrt() as u64
                 }
+            };
+
+            while i < upper_bound && n % i != 0 {
+                i = i + self.increment
             }
 
-            return true;
+            i == upper_bound
         }
     }
 }
@@ -62,24 +58,34 @@ mod tests {
     ];
 
     #[test]
-    fn test_naive_division() {
+    fn test_whole_naive_trial_division_increment_by_one() {
+        let ntd = NaiveTrialDivision {
+            increment: 1,
+            upper_bound: NaiveTrialDivisionUpperBound::Whole,
+        };
+
         for p in PRIMES_TO_100 {
-            assert_eq!(NaiveDivision::is_prime(*p), true);
+            assert_eq!(ntd.is_prime(*p), true);
         }
 
         for p in NOT_PRIMES {
-            assert_eq!(NaiveDivision::is_prime(*p), false);
+            assert_eq!(ntd.is_prime(*p), false);
         }
     }
 
     #[test]
-    fn test_naive_half_division() {
+    fn test_whole_naive_trial_division_increment_by_two() {
+        let ntd = NaiveTrialDivision {
+            increment: 2,
+            upper_bound: NaiveTrialDivisionUpperBound::Whole,
+        };
+
         for p in PRIMES_TO_100 {
-            assert_eq!(NaiveHalfDivision::is_prime(*p), true);
+            assert_eq!(ntd.is_prime(*p), true);
         }
 
         for p in NOT_PRIMES {
-            assert_eq!(NaiveHalfDivision::is_prime(*p), false);
+            assert_eq!(ntd.is_prime(*p), false);
         }
     }
 }
