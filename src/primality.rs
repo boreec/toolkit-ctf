@@ -71,4 +71,15 @@ mod tests {
             assert_eq!(NaiveDivision::is_prime(*p), false);
         }
     }
+
+    #[test]
+    fn test_naive_half_division() {
+        for p in PRIMES_TO_100 {
+            assert_eq!(NaiveHalfDivision::is_prime(*p), true);
+        }
+
+        for p in NOT_PRIMES {
+            assert_eq!(NaiveHalfDivision::is_prime(*p), false);
+        }
+    }
 }
