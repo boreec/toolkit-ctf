@@ -29,7 +29,7 @@ pub mod primality_test_algorithms {
                 NaiveTrialDivisionUpperBound::Whole => n,
                 NaiveTrialDivisionUpperBound::Half => n / 2 + 1,
                 NaiveTrialDivisionUpperBound::Square => {
-                    (n as f64).sqrt() as u64
+                    (n as f64).sqrt() as u64 + 1
                 }
             };
 
@@ -110,6 +110,38 @@ mod tests {
         let ntd = NaiveTrialDivision {
             increment: 2,
             upper_bound: NaiveTrialDivisionUpperBound::Half,
+        };
+
+        for p in PRIMES_TO_100 {
+            assert_eq!(ntd.is_prime(*p), true);
+        }
+
+        for p in NOT_PRIMES {
+            assert_eq!(ntd.is_prime(*p), false);
+        }
+    }
+
+    #[test]
+    fn test_square_naive_trial_division_increment_by_one() {
+        let ntd = NaiveTrialDivision {
+            increment: 1,
+            upper_bound: NaiveTrialDivisionUpperBound::Square,
+        };
+
+        for p in PRIMES_TO_100 {
+            assert_eq!(ntd.is_prime(*p), true);
+        }
+
+        for p in NOT_PRIMES {
+            assert_eq!(ntd.is_prime(*p), false);
+        }
+    }
+
+    #[test]
+    fn test_square_naive_trial_division_increment_by_two() {
+        let ntd = NaiveTrialDivision {
+            increment: 2,
+            upper_bound: NaiveTrialDivisionUpperBound::Square,
         };
 
         for p in PRIMES_TO_100 {
