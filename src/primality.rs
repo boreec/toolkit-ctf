@@ -16,11 +16,11 @@ pub mod primality_test_algorithms {
 
     impl super::PrimalityTest for NaiveTrialDivision {
         fn is_prime(&self, n: u64) -> bool {
-            if n == 2 || n == 3 || n == 5 {
+            if n == 2 || n == 3 {
                 return true;
             }
 
-            if n <= 1 || n % 2 == 0 || n % 3 == 0 {
+            if n <= 1 || n % 2 == 0 {
                 return false;
             }
 
