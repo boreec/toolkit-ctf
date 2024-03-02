@@ -27,7 +27,7 @@ pub mod primality_test_algorithms {
             let mut i = 3;
             let upper_bound = match self.upper_bound {
                 DivisionUpperBound::Whole => n,
-                DivisionUpperBound::Half => n / 2 + 1,
+                DivisionUpperBound::Half => n / 2,
                 DivisionUpperBound::Square => (n as f64).sqrt() as u64 + 1,
             };
 
@@ -45,20 +45,19 @@ pub mod primality_test_algorithms {
 
     impl super::PrimalityTest for SixKOneDivision {
         fn is_prime(&self, n: u64) -> bool {
-            if n == 2 || n == 3 {
+            if n == 2 || n == 3 || n == 5 {
                 return true;
             }
 
-            if n <= 1 || n % 2 == 0 || n % 3 == 0 {
+            if n <= 1 || n % 2 == 0 || n % 3 == 0 || n % 5 == 0 {
                 return false;
             }
 
             let upper_bound = match self.upper_bound {
                 DivisionUpperBound::Whole => n,
-                DivisionUpperBound::Half => n / 2 + 1,
-                DivisionUpperBound::Square => (n as f64).sqrt() as u64 + 1,
+                DivisionUpperBound::Half => n / 2,
+                DivisionUpperBound::Square => (n as f64).sqrt() as u64,
             };
-
             let mut k1 = 5;
             let mut k2 = 7;
 
