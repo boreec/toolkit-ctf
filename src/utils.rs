@@ -2,9 +2,9 @@ pub fn convert_ascii_integers_to_chars(ascii_integers: Vec<u8>) -> Vec<char> {
     ascii_integers.iter().map(|&i| i as char).collect()
 }
 
-pub fn decode_hex_to_bytes(hex_string: &str) -> Vec<u8> {
+pub fn decode_hex_to_bytes(hex_string: &str) -> Result<Vec<u8>, &'static str> {
     let result: Vec<u8> = vec![];
-    return result;
+    return Ok(result);
 }
 
 #[cfg(test)]
@@ -28,6 +28,6 @@ mod tests {
 
     #[test]
     fn test_decode_hex_to_bytes() {
-        assert!(false);
+        assert_eq!(Ok(vec![]), decode_hex_to_bytes(""));
     }
 }
