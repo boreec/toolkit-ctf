@@ -3,6 +3,7 @@ pub trait PrimalityTest {
 }
 
 pub mod primality_test_algorithms {
+    #[derive(PartialEq, Eq)]
     pub enum DivisionUpperBound {
         Whole,
         Half,
@@ -45,11 +46,11 @@ pub mod primality_test_algorithms {
 
     impl super::PrimalityTest for SixKOneDivision {
         fn is_prime(&self, n: u64) -> bool {
-            if n == 2 || n == 3 || n == 5 {
+            if n == 2 || n == 3 || n == 5 || n == 7 {
                 return true;
             }
 
-            if n <= 1 || n % 2 == 0 || n % 3 == 0 || n % 5 == 0 {
+            if n <= 1 || n % 2 == 0 || n % 3 == 0 || n % 5 == 0 || n % 7 == 0 {
                 return false;
             }
 
@@ -70,6 +71,12 @@ pub mod primality_test_algorithms {
             }
 
             if k1 < upper_bound && k2 < upper_bound {
+                return false;
+            }
+
+            if self.upper_bound == DivisionUpperBound::Square
+                && (n % k1 == 0 || n % k2 == 0)
+            {
                 return false;
             }
 
@@ -377,7 +384,12 @@ mod tests {
         };
 
         for p in FIRST_1000_PRIMES {
-            assert_eq!(skod.is_prime(*p), true);
+            assert!(
+                skod.is_prime(*p) == true,
+                "is_prime({}): {}",
+                *p,
+                skod.is_prime(*p)
+            );
         }
 
         assert_eq!(skod.is_prime(0), false);
@@ -400,7 +412,12 @@ mod tests {
         assert_eq!(skod.is_prime(0), false);
         assert_eq!(skod.is_prime(1), false);
         for p in FIRST_1000_COMPOSITES {
-            assert_eq!(skod.is_prime(*p), false);
+            assert!(
+                skod.is_prime(*p) == false,
+                "is_prime({}): {}",
+                *p,
+                skod.is_prime(*p)
+            );
         }
     }
 }
