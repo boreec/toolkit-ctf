@@ -33,7 +33,7 @@ pub mod primality_test_algorithms {
             };
 
             while i < upper_bound && n % i != 0 {
-                i = i + self.increment
+                i += self.increment;
             }
 
             i >= upper_bound
