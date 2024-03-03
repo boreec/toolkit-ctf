@@ -2,6 +2,11 @@ pub fn convert_ascii_integers_to_chars(ascii_integers: Vec<u8>) -> Vec<char> {
     ascii_integers.iter().map(|&i| i as char).collect()
 }
 
+pub fn decode_hex_to_bytes(hex_string: &str) -> Vec<u8> {
+    let result: Vec<u8> = vec![];
+    return result;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -19,5 +24,10 @@ mod tests {
         ];
 
         assert_eq!(expected, convert_ascii_integers_to_chars(ascii_integers));
+    }
+
+    #[test]
+    fn test_decode_hex_to_bytes() {
+        assert!(false);
     }
 }
