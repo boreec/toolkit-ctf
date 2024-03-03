@@ -1,9 +1,5 @@
 pub fn convert_ascii_integers_to_chars(ascii_integers: Vec<u8>) -> Vec<char> {
-    let mut chars: Vec<char> = vec![];
-    for i in ascii_integers.iter() {
-        chars.push(i.clone() as char);
-    }
-    return chars;
+    ascii_integers.iter().map(|&i| i as char).collect()
 }
 
 #[cfg(test)]
