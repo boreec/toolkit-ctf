@@ -256,6 +256,8 @@ mod tests {
             assert_eq!(ntd.is_prime(*p), true);
         }
 
+        assert_eq!(ntd.is_prime(0), false);
+        assert_eq!(ntd.is_prime(1), false);
         for p in FIRST_1000_COMPOSITES {
             assert_eq!(ntd.is_prime(*p), false);
         }
@@ -272,6 +274,8 @@ mod tests {
             assert_eq!(ntd.is_prime(*p), true);
         }
 
+        assert_eq!(ntd.is_prime(0), false);
+        assert_eq!(ntd.is_prime(1), false);
         for p in FIRST_1000_COMPOSITES {
             assert_eq!(ntd.is_prime(*p), false);
         }
@@ -288,6 +292,8 @@ mod tests {
             assert_eq!(ntd.is_prime(*p), true);
         }
 
+        assert_eq!(ntd.is_prime(0), false);
+        assert_eq!(ntd.is_prime(1), false);
         for p in FIRST_1000_COMPOSITES {
             assert_eq!(ntd.is_prime(*p), false);
         }
@@ -304,6 +310,8 @@ mod tests {
             assert_eq!(ntd.is_prime(*p), true);
         }
 
+        assert_eq!(ntd.is_prime(0), false);
+        assert_eq!(ntd.is_prime(1), false);
         for p in FIRST_1000_COMPOSITES {
             assert_eq!(ntd.is_prime(*p), false);
         }
@@ -320,6 +328,8 @@ mod tests {
             assert_eq!(ntd.is_prime(*p), true);
         }
 
+        assert_eq!(ntd.is_prime(0), false);
+        assert_eq!(ntd.is_prime(1), false);
         for p in FIRST_1000_COMPOSITES {
             assert_eq!(ntd.is_prime(*p), false);
         }
@@ -336,6 +346,8 @@ mod tests {
             assert_eq!(ntd.is_prime(*p), true);
         }
 
+        assert_eq!(ntd.is_prime(0), false);
+        assert_eq!(ntd.is_prime(1), false);
         for p in FIRST_1000_COMPOSITES {
             assert_eq!(ntd.is_prime(*p), false);
         }
@@ -351,6 +363,8 @@ mod tests {
             assert_eq!(skod.is_prime(*p), true);
         }
 
+        assert_eq!(skod.is_prime(0), false);
+        assert_eq!(skod.is_prime(1), false);
         for p in FIRST_1000_COMPOSITES {
             assert_eq!(skod.is_prime(*p), false);
         }
@@ -366,6 +380,8 @@ mod tests {
             assert_eq!(skod.is_prime(*p), true);
         }
 
+        assert_eq!(skod.is_prime(0), false);
+        assert_eq!(skod.is_prime(1), false);
         for p in FIRST_1000_COMPOSITES {
             assert_eq!(skod.is_prime(*p), false);
         }
@@ -381,6 +397,8 @@ mod tests {
             assert_eq!(skod.is_prime(*p), true);
         }
 
+        assert_eq!(skod.is_prime(0), false);
+        assert_eq!(skod.is_prime(1), false);
         for p in FIRST_1000_COMPOSITES {
             assert_eq!(skod.is_prime(*p), false);
         }
