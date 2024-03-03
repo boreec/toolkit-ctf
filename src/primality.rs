@@ -66,8 +66,8 @@ pub mod primality_test_algorithms {
                 && n % k1 != 0
                 && n % k2 != 0
             {
-                k1 = k1 + 6;
-                k2 = k2 + 6;
+                k1 += 6;
+                k2 += 6;
             }
 
             if k1 < upper_bound && k2 < upper_bound {
