@@ -80,9 +80,9 @@ pub mod primality_test_algorithms {
                 return false;
             }
 
-            return n % k1 == 0
+            n % k1 == 0
                 || n % k2 == 0
-                || (k1 >= upper_bound && k2 >= upper_bound);
+                || (k1 >= upper_bound && k2 >= upper_bound)
         }
     }
 }
