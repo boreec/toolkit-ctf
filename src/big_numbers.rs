@@ -1,9 +1,9 @@
 mod big_numbers {
-    pub struct base10 {
+    pub struct Base10 {
         value: String,
     }
 
-    pub struct base16 {
+    pub struct Base16 {
         value: String,
     }
 }
