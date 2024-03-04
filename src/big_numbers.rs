@@ -1,3 +1,4 @@
+/// Handles numbers in different bases regardless of their length.
 mod big_numbers {
     #[derive(Debug)]
     pub struct Base10 {
