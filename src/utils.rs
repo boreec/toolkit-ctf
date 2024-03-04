@@ -2,6 +2,14 @@ pub fn convert_ascii_integers_to_chars(ascii_integers: Vec<u8>) -> Vec<char> {
     ascii_integers.iter().map(|&i| i as char).collect()
 }
 
+pub fn base10_string_to_hex_string(base10_string: &str) -> String {
+    if let Ok(decimal) = base10_string.parse::<u64>() {
+        format!("{:X}", decimal)
+    } else {
+        String::from("Invalid input: Not a valid decimal number")
+    }
+}
+
 pub fn decode_hex_to_bytes(hex_string: &str) -> Result<Vec<u8>, &'static str> {
     let result: Vec<u8> = vec![];
     let padded_hex_string = if hex_string.len() % 2 == 0 {
@@ -100,5 +108,11 @@ mod tests {
             encode_bytes_to_base64(bytes.clone()),
             "crypto/Base+64+Encoding+is+Web+Safe/",
         );
+    }
+
+    #[test]
+    fn test_base10_string_to_hex_string() {
+        let base10_str = "310400273487";
+        assert_eq!("48454C4C4F", base10_string_to_hex_string(base10_str))
     }
 }
