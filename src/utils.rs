@@ -3,7 +3,7 @@ pub fn convert_ascii_integers_to_chars(ascii_integers: Vec<u8>) -> Vec<char> {
 }
 
 pub fn base10_string_to_hex_string(base10_string: &str) -> String {
-    if let Ok(decimal) = base10_string.parse::<u64>() {
+    if let Ok(decimal) = base10_string.parse::<u128>() {
         format!("{:X}", decimal)
     } else {
         String::from("Invalid input: Not a valid decimal number")
@@ -113,6 +113,13 @@ mod tests {
     #[test]
     fn test_base10_string_to_hex_string() {
         let base10_str = "310400273487";
-        assert_eq!("48454C4C4F", base10_string_to_hex_string(base10_str))
+        assert_eq!("48454C4C4F", base10_string_to_hex_string(base10_str));
+
+        let base10_str = "11515195063862318899931685488813747395775516287289682636499965282714637259206269";
+        let hex_str = base10_string_to_hex_string(base10_str);
+        let bytes = decode_hex_to_bytes(&hex_str).unwrap();
+        let chars = convert_ascii_integers_to_chars(bytes);
+        let encoded_message: String = chars.into_iter().collect();
+        assert!(encoded_message == "foo", "encoded_msg: {}", encoded_message);
     }
 }
