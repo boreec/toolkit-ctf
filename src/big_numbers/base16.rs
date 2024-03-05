@@ -48,20 +48,24 @@ impl TryFrom<&str> for Base16 {
             }
         }
 
-        // remove leading zeros
-        let mut filtered: Vec<u8> = vec![];
-        let mut i = bytes.len() - 1;
-        while i >= 0 && bytes[i] == 0u8 {
-            i -= 1;
-        }
+        if bytes.len() > 1 {
+            // remove leading zeros
+            let mut filtered: Vec<u8> = vec![];
+            let mut i = bytes.len() - 1;
+            while i >= 0 && bytes[i] == 0u8 {
+                i -= 1;
+            }
 
-        let mut j = 0;
-        while j < i {
-            filtered.push(bytes[j]);
-            j += 1;
-        }
+            let mut j = 0;
+            while j < i {
+                filtered.push(bytes[j]);
+                j += 1;
+            }
 
-        Ok(Self { value: filtered })
+            Ok(Self { value: filtered })
+        } else {
+            Ok(Self { value: bytes })
+        }
     }
 }
 
