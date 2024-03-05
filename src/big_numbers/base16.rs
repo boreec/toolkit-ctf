@@ -26,10 +26,10 @@ impl From<Base10> for Base16 {
     }
 }
 
-impl TryFrom<String> for Base16 {
+impl TryFrom<&str> for Base16 {
     type Error = &'static str;
 
-    fn try_from(hex_string: String) -> Result<Self, Self::Error> {
+    fn try_from(hex_string: &str) -> Result<Self, Self::Error> {
         let padded_hex_string = if hex_string.len() % 2 == 0 {
             hex_string.to_owned()
         } else {
@@ -62,5 +62,16 @@ mod tests {
             Base16::from(Base10::new("0".to_string())),
             Base16 { value: vec![0] }
         );
+    }
+
+    #[test]
+    fn test_base16_from_string() {
+        assert_eq!(Vec::<u8>::new(), Base16::try_from("").unwrap().value);
+        assert_eq!(vec![0u8], Base16::try_from("0").unwrap().value);
+        assert_eq!(vec![10u8], Base16::try_from("A").unwrap().value);
+        assert_eq!(vec![250u8], Base16::try_from("FA").unwrap().value);
+        assert_eq!(vec![255u8], Base16::try_from("FF").unwrap().value);
+        assert_eq!(vec![255u8, 1u8], Base16::try_from("1FF").unwrap().value);
+        assert_eq!(vec![255u8, 255u8], Base16::try_from("FFFF").unwrap().value);
     }
 }
