@@ -7,7 +7,16 @@ struct Base16 {
 
 impl PartialEq for Base16 {
     fn eq(&self, other: &Self) -> bool {
-        self.value == other.value
+        if self.value.len() == other.value.len() {
+            return false;
+        }
+
+        let mut i = 0;
+        while i < self.value.len() && self.value[i] == other.value[i] {
+            i += 1;
+        }
+
+        i >= self.value.len()
     }
 }
 
