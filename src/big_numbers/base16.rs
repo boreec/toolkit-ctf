@@ -1,7 +1,7 @@
 use crate::big_numbers::base10::Base10;
 
-#[derive(Debug)]
-struct Base16 {
+#[derive(Clone, Debug)]
+pub struct Base16 {
     pub value: Vec<u8>,
 }
 
@@ -48,7 +48,20 @@ impl TryFrom<&str> for Base16 {
             }
         }
 
-        Ok(Self { value: bytes })
+        // remove leading zeros
+        let mut filtered: Vec<u8> = vec![];
+        let mut i = bytes.len() - 1;
+        while i >= 0 && bytes[i] == 0u8 {
+            i += 1;
+        }
+
+        let mut j = 0;
+        while j < i {
+            filtered.push(bytes[j]);
+            j += 1;
+        }
+
+        Ok(Self { value: filtered })
     }
 }
 
@@ -71,7 +84,7 @@ mod tests {
         assert_eq!(vec![10u8], Base16::try_from("A").unwrap().value);
         assert_eq!(vec![250u8], Base16::try_from("FA").unwrap().value);
         assert_eq!(vec![255u8], Base16::try_from("FF").unwrap().value);
-        assert_eq!(vec![255u8, 1u8], Base16::try_from("1FF").unwrap().value);
+        assert_eq!(vec![1u8, 255u8], Base16::try_from("1FF").unwrap().value);
         assert_eq!(vec![255u8, 255u8], Base16::try_from("FFFF").unwrap().value);
         assert_eq!(vec![0u8], Base16::try_from("0000").unwrap().value);
         assert!(Base16::try_from("qpwkdpq").is_err());

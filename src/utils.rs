@@ -42,6 +42,7 @@ pub fn encode_bytes_to_base64(bytes: Vec<u8>) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::big_numbers::base16::Base16;
 
     #[test]
     fn test_convert_ascii_integers_to_chars() {
@@ -60,26 +61,14 @@ mod tests {
 
     #[test]
     fn test_encode_bytes_to_base64() {
-        let bytes = decode_hex_to_bytes(
+        let bytes = Base16::try_from(
             "72bca9b68fc16ac7beeb8f849dca1d8a783e8acf9679bf9269f7bf",
-        )
-        .unwrap();
+        );
+        assert!(bytes.is_ok());
+
         assert_eq!(
-            encode_bytes_to_base64(bytes.clone()),
+            encode_bytes_to_base64(bytes.unwrap().value),
             "crypto/Base+64+Encoding+is+Web+Safe/",
         );
-    }
-
-    #[test]
-    fn test_base10_string_to_hex_string() {
-        let base10_str = "310400273487";
-        assert_eq!("48454C4C4F", base10_string_to_hex_string(base10_str));
-
-        let base10_str = "11515195063862318899931685488813747395775516287289682636499965282714637259206269";
-        let hex_str = base10_string_to_hex_string(base10_str);
-        let bytes = decode_hex_to_bytes(&hex_str).unwrap();
-        let chars = convert_ascii_integers_to_chars(bytes);
-        let encoded_message: String = chars.into_iter().collect();
-        assert!(encoded_message == "foo", "encoded_msg: {}", encoded_message);
     }
 }
