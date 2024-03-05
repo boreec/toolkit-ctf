@@ -73,5 +73,8 @@ mod tests {
         assert_eq!(vec![255u8], Base16::try_from("FF").unwrap().value);
         assert_eq!(vec![255u8, 1u8], Base16::try_from("1FF").unwrap().value);
         assert_eq!(vec![255u8, 255u8], Base16::try_from("FFFF").unwrap().value);
+        assert_eq!(vec![0u8], Base16::try_from("0000").unwrap().value);
+        assert!(Base16::try_from("qpwkdpq").is_err());
+        assert!(Base16::try_from("x0001").is_err());
     }
 }
