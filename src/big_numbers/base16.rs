@@ -7,7 +7,7 @@ pub struct Base16 {
 
 impl PartialEq for Base16 {
     fn eq(&self, other: &Self) -> bool {
-        if self.value.len() == other.value.len() {
+        if self.value.len() != other.value.len() {
             return false;
         }
 
@@ -22,7 +22,7 @@ impl PartialEq for Base16 {
 
 impl From<Base10> for Base16 {
     fn from(decimal_number: Base10) -> Self {
-        Self { value: vec![0] }
+        Self { value: vec![0u8] }
     }
 }
 
@@ -52,7 +52,7 @@ impl TryFrom<&str> for Base16 {
         let mut filtered: Vec<u8> = vec![];
         let mut i = bytes.len() - 1;
         while i >= 0 && bytes[i] == 0u8 {
-            i += 1;
+            i -= 1;
         }
 
         let mut j = 0;
@@ -73,7 +73,7 @@ mod tests {
     fn test_base16_from_base10() {
         assert_eq!(
             Base16::from(Base10::new("0".to_string())),
-            Base16 { value: vec![0] }
+            Base16 { value: vec![0u8] }
         );
     }
 
