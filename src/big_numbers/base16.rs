@@ -26,6 +26,32 @@ impl From<Base10> for Base16 {
     }
 }
 
+impl TryFrom<String> for Base16 {
+    type Error = &'static str;
+
+    fn try_from(hex_string: String) -> Result<Self, Self::Error> {
+        let padded_hex_string = if hex_string.len() % 2 == 0 {
+            hex_string.to_owned()
+        } else {
+            format!("0{}", hex_string)
+        };
+
+        let mut bytes = Vec::with_capacity(padded_hex_string.len() / 2);
+
+        for i in (0..padded_hex_string.len()).step_by(2) {
+            let hex_pair = &padded_hex_string[i..i + 2];
+
+            if let Ok(byte) = u8::from_str_radix(hex_pair, 16) {
+                bytes.push(byte);
+            } else {
+                return Err("Invalid hexadecimal character");
+            }
+        }
+
+        Ok(Self { value: bytes })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
