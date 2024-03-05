@@ -2,13 +2,7 @@ use crate::big_numbers::base10::Base10;
 
 #[derive(Debug)]
 struct Base16 {
-    pub value: String,
-}
-
-impl Base16 {
-    pub fn new(value: String) -> Self {
-        Self { value }
-    }
+    pub value: Vec<u8>,
 }
 
 impl PartialEq for Base16 {
@@ -19,9 +13,7 @@ impl PartialEq for Base16 {
 
 impl From<Base10> for Base16 {
     fn from(decimal_number: Base10) -> Self {
-        Self {
-            value: "0".to_string(),
-        }
+        Self { value: vec![0] }
     }
 }
 
@@ -33,7 +25,7 @@ mod tests {
     fn test_base16_from_base10() {
         assert_eq!(
             Base16::from(Base10::new("0".to_string())),
-            Base16::new("0".to_string())
+            Base16 { value: vec![0] }
         );
     }
 }
