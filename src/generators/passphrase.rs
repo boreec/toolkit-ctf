@@ -1,3 +1,5 @@
+use rand::Rng;
+
 use std::error::Error;
 use std::fs::File;
 use std::io::{self, BufRead};
@@ -18,8 +20,19 @@ fn load_frequency_list() -> Result<Vec<String>, io::Error> {
     Ok(words)
 }
 
-pub fn generate_passphrase(lower_bound: u128) -> String {
-    return "".to_string();
+pub fn generate_passphrase(
+    lower_bound: usize,
+) -> Result<String, Box<dyn Error>> {
+    let frequency_list = load_frequency_list()?;
+    let mut rng = rand::thread_rng();
+    let mut passphrase = String::new();
+
+    while passphrase.len() < lower_bound {
+        let random_index = rng.gen_range(0..frequency_list.len());
+        let random_word: String = frequency_list[random_index].clone();
+        passphrase = passphrase + random_word.as_str();
+    }
+    Ok(passphrase.to_string())
 }
 
 #[cfg(test)]
@@ -30,7 +43,8 @@ mod tests {
     fn test_generate_passphrase_with_lower_bound() {
         for i in 0..1000 {
             let passphrase = generate_passphrase(i);
-            assert!(passphrase.len() >= i as usize);
+            assert!(passphrase.is_ok());
+            assert!(passphrase.unwrap().len() >= i);
         }
     }
 }
