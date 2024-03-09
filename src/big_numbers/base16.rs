@@ -1,4 +1,5 @@
 use crate::big_numbers::base10::Base10;
+use std::error::Error;
 
 #[derive(Clone, Debug)]
 pub struct Base16 {
@@ -13,6 +14,24 @@ impl Base16 {
             }
         }
         Ok(())
+    }
+
+    pub fn simplify_hex_string(hex_string: &str) -> String {
+        let mut leading_zeros = 0;
+        let mut i = 0;
+
+        for c in hex_string.chars() {
+            if c == '0' {
+                leading_zeros += 1;
+            } else {
+                break;
+            }
+        }
+
+        if leading_zeros == hex_string.len() {
+            return "0".to_string();
+        }
+        return hex_string[leading_zeros..].to_string();
     }
 }
 
@@ -38,9 +57,11 @@ impl From<Base10> for Base16 {
 }
 
 impl TryFrom<&str> for Base16 {
-    type Error = &'static str;
+    type Error = Box<dyn Error>;
 
-    fn try_from(hex_string: &str) -> Result<Self, Self::Error> {
+    fn try_from(hex_string: &str) -> Result<Self, Box<dyn Error>> {
+        Base16::validate_hex_string(hex_string)?;
+
         let padded_hex_string = if hex_string.len() % 2 == 0 {
             hex_string.to_owned()
         } else {
@@ -52,31 +73,11 @@ impl TryFrom<&str> for Base16 {
         for i in (0..padded_hex_string.len()).step_by(2) {
             let hex_pair = &padded_hex_string[i..i + 2];
 
-            if let Ok(byte) = u8::from_str_radix(hex_pair, 16) {
-                bytes.push(byte);
-            } else {
-                return Err("Invalid hexadecimal character");
-            }
+            let byte = u8::from_str_radix(hex_pair, 16)?;
+            bytes.push(byte);
         }
 
-        if bytes.len() > 1 {
-            // remove leading zeros
-            let mut filtered: Vec<u8> = vec![];
-            let mut i = bytes.len() - 1;
-            while i >= 0 && bytes[i] == 0u8 {
-                i -= 1;
-            }
-
-            let mut j = 0;
-            while j < i {
-                filtered.push(bytes[j]);
-                j += 1;
-            }
-
-            Ok(Self { value: filtered })
-        } else {
-            Ok(Self { value: bytes })
-        }
+        Ok(Self { value: bytes })
     }
 }
 
