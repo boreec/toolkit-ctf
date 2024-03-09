@@ -21,13 +21,13 @@ fn load_frequency_list() -> Result<Vec<String>, io::Error> {
 }
 
 pub fn generate_passphrase(
-    lower_bound: usize,
+    min_length: usize,
 ) -> Result<String, Box<dyn Error>> {
     let frequency_list = load_frequency_list()?;
     let mut rng = rand::thread_rng();
     let mut passphrase = String::new();
 
-    while passphrase.len() < lower_bound {
+    while passphrase.len() < min_length {
         let random_index = rng.gen_range(0..frequency_list.len());
         let random_word: String = frequency_list[random_index].clone();
         passphrase = passphrase + random_word.as_str();
@@ -40,11 +40,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_generate_passphrase_with_lower_bound() {
-        for i in 0..1000 {
-            let passphrase = generate_passphrase(i);
+    fn test_generate_passphrase_with_min_length() {
+        for min_length in 0..1000 {
+            let passphrase = generate_passphrase(min_length);
             assert!(passphrase.is_ok());
-            assert!(passphrase.unwrap().len() >= i);
+            assert!(passphrase.unwrap().len() >= min_length);
         }
     }
 }
