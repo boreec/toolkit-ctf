@@ -60,12 +60,16 @@ impl TryFrom<&str> for Base16 {
     type Error = Box<dyn Error>;
 
     fn try_from(hex_string: &str) -> Result<Self, Box<dyn Error>> {
+        if hex_string.is_empty() {
+            return Ok(Self { value: Vec::new() });
+        }
         Base16::validate_hex_string(hex_string)?;
+        let simplified_hex_string = Base16::simplify_hex_string(hex_string);
 
-        let padded_hex_string = if hex_string.len() % 2 == 0 {
-            hex_string.to_owned()
+        let padded_hex_string = if simplified_hex_string.len() % 2 == 0 {
+            simplified_hex_string.to_owned()
         } else {
-            format!("0{}", hex_string)
+            format!("0{}", simplified_hex_string)
         };
 
         let mut bytes = Vec::with_capacity(padded_hex_string.len() / 2);
