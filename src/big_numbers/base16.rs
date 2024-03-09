@@ -116,4 +116,13 @@ mod tests {
         assert!(Base16::try_from("qpwkdpq").is_err());
         assert!(Base16::try_from("x0001").is_err());
     }
+
+    #[test]
+    fn test_simplify_hex_string() {
+        assert_eq!("0", Base16::simplify_hex_string("0"));
+        assert_eq!("0", Base16::simplify_hex_string("00000"));
+        assert_eq!("FF", Base16::simplify_hex_string("0FF"));
+        assert_eq!("AF0000", Base16::simplify_hex_string("AF0000"));
+        assert_eq!("12AFAFD", Base16::simplify_hex_string("12AFAFD"));
+    }
 }
