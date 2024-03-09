@@ -1,4 +1,4 @@
-mod big_numbers;
+pub mod big_numbers;
 mod generators;
 mod primality;
 mod utils;

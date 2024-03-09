@@ -18,7 +18,6 @@ impl Base16 {
 
     pub fn simplify_hex_string(hex_string: &str) -> String {
         let mut leading_zeros = 0;
-        let mut i = 0;
 
         for c in hex_string.chars() {
             if c == '0' {
@@ -51,7 +50,7 @@ impl PartialEq for Base16 {
 }
 
 impl From<Base10> for Base16 {
-    fn from(decimal_number: Base10) -> Self {
+    fn from(_decimal_number: Base10) -> Self {
         Self { value: vec![0u8] }
     }
 }
