@@ -5,6 +5,17 @@ pub struct Base16 {
     pub value: Vec<u8>,
 }
 
+impl Base16 {
+    pub fn validate_hex_string(hex_string: &str) -> Result<(), String> {
+        for c in hex_string.chars() {
+            if !c.is_digit(16u32) {
+                return Err(format!("{} is not a correct digit in base 16", c));
+            }
+        }
+        Ok(())
+    }
+}
+
 impl PartialEq for Base16 {
     fn eq(&self, other: &Self) -> bool {
         if self.value.len() != other.value.len() {
