@@ -1,5 +1,5 @@
 pub mod big_numbers;
-mod generators;
+pub mod generators;
 mod primality;
 mod utils;
 

@@ -1,1 +1,1 @@
-mod passphrase;
+pub mod passphrase;

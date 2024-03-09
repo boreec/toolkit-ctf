@@ -4,10 +4,10 @@ use std::error::Error;
 use std::fs::File;
 use std::io::{self, BufRead};
 
-const DEFAULT_WORDS_LIST_FILE: &str =
+pub const DEFAULT_WORDS_LIST_FILE: &str =
     "data/eng-simple_wikipedia_2021_30K-words.txt";
 
-fn load_frequency_list() -> Result<Vec<String>, io::Error> {
+pub fn load_frequency_list() -> Result<Vec<String>, io::Error> {
     let mut words: Vec<String> = Vec::with_capacity(30000);
     let file = File::open(DEFAULT_WORDS_LIST_FILE)?;
     let reader = io::BufReader::new(file);
