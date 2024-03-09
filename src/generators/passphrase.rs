@@ -42,6 +42,13 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_load_frequency_list() {
+        let frequency_list = load_frequency_list();
+        assert!(frequency_list.is_ok());
+        assert!(frequency_list.unwrap().len() >= 30000);
+    }
+
+    #[test]
     fn test_generate_passphrase_with_min_length() {
         let frequency_list = load_frequency_list().unwrap();
         for min_length in 0..1000 {
