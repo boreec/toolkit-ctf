@@ -1,13 +1,9 @@
 #[derive(Debug)]
 pub struct Base10 {
-    value: String,
+    bytes: Vec<u8>,
 }
 
 impl Base10 {
-    pub fn new(value: String) -> Self {
-        Self { value }
-    }
-
     pub fn validate_decimal_string(decimal_string: &str) -> Result<(), String> {
         for c in decimal_string.chars() {
             if !c.is_digit(10u32) {
@@ -20,12 +16,12 @@ impl Base10 {
 
 impl PartialEq for Base10 {
     fn eq(&self, other: &Self) -> bool {
-        if self.value.len() != other.value.len() {
+        if self.bytes.len() != other.bytes.len() {
             return false;
         }
 
-        for i in 0..self.value.len() {
-            if self.value[i] != other.value[i] {
+        for i in 0..self.bytes.len() {
+            if self.bytes[i] != other.bytes[i] {
                 return false;
             }
         }
