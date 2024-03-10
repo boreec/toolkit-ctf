@@ -80,6 +80,7 @@ impl TryFrom<&str> for Base16 {
             bytes.push(byte);
         }
 
+        bytes.reverse();
         Ok(Self { value: bytes })
     }
 }
@@ -113,7 +114,8 @@ mod tests {
         assert_eq!(vec![10u8], Base16::try_from("A").unwrap().value);
         assert_eq!(vec![250u8], Base16::try_from("FA").unwrap().value);
         assert_eq!(vec![255u8], Base16::try_from("FF").unwrap().value);
-        assert_eq!(vec![1u8, 255u8], Base16::try_from("1FF").unwrap().value);
+        assert_eq!(vec![255u8, 1u8], Base16::try_from("1FF").unwrap().value);
+        assert_eq!(vec![255u8, 160u8], Base16::try_from("A0FF").unwrap().value);
         assert_eq!(vec![255u8, 255u8], Base16::try_from("FFFF").unwrap().value);
         assert_eq!(vec![0u8], Base16::try_from("0000").unwrap().value);
         assert!(Base16::try_from("qpwkdpq").is_err());
