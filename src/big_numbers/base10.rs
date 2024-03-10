@@ -1,6 +1,6 @@
 #[derive(Debug)]
 pub struct Base10 {
-    bytes: Vec<u8>,
+    pub bytes: Vec<u8>,
 }
 
 impl Base10 {
