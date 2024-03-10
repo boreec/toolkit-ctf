@@ -31,10 +31,11 @@ mod tests {
     #[test]
     fn test_validate_decimal_string() {
         assert!(Base10::validate_decimal_string("0").is_ok());
-        assert!(Base10::validate_decimal_string("0af21").is_ok());
-        assert!(Base10::validate_decimal_string("FFFFFF").is_ok());
+        assert!(Base10::validate_decimal_string("00000").is_ok());
+        assert!(Base10::validate_decimal_string("1").is_ok());
         assert!(Base10::validate_decimal_string("840983204802340823").is_ok());
         assert!(Base10::validate_decimal_string("0x0000").is_err());
         assert!(Base10::validate_decimal_string("dsafhodhfo").is_err());
+        assert!(Base10::validate_decimal_string("BADCAFE").is_err());
     }
 }
