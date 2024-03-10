@@ -50,8 +50,10 @@ impl PartialEq for Base16 {
 }
 
 impl From<Base10> for Base16 {
-    fn from(_decimal_number: Base10) -> Self {
-        Self { bytes: vec![0u8] }
+    fn from(decimal_number: Base10) -> Self {
+        Self {
+            bytes: decimal_number.bytes,
+        }
     }
 }
 
