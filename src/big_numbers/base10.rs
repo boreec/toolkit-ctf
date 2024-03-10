@@ -62,7 +62,7 @@ impl TryFrom<&str> for Base10 {
         let bytes_capacity = simplified_decimal_string.len() as f64 * 0.3;
         let mut bytes = Vec::with_capacity(bytes_capacity as usize);
 
-        // concert decimal string to bytes string here
+        // convert decimal string to bytes vector
         let mut current_byte = 0;
         let mut current_digit_count = 0;
 
