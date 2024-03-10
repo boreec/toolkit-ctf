@@ -20,7 +20,17 @@ impl Base10 {
 
 impl PartialEq for Base10 {
     fn eq(&self, other: &Self) -> bool {
-        self.value == other.value
+        if self.value.len() != other.value.len() {
+            return false;
+        }
+
+        for i in 0..self.value.len() {
+            if self.value[i] != other.value[i] {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 
