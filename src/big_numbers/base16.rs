@@ -3,7 +3,7 @@ use std::error::Error;
 
 #[derive(Clone, Debug)]
 pub struct Base16 {
-    pub value: Vec<u8>,
+    pub bytes: Vec<u8>,
 }
 
 impl Base16 {
@@ -36,22 +36,22 @@ impl Base16 {
 
 impl PartialEq for Base16 {
     fn eq(&self, other: &Self) -> bool {
-        if self.value.len() != other.value.len() {
+        if self.bytes.len() != other.bytes.len() {
             return false;
         }
 
         let mut i = 0;
-        while i < self.value.len() && self.value[i] == other.value[i] {
+        while i < self.bytes.len() && self.bytes[i] == other.bytes[i] {
             i += 1;
         }
 
-        i >= self.value.len()
+        i >= self.bytes.len()
     }
 }
 
 impl From<Base10> for Base16 {
     fn from(_decimal_number: Base10) -> Self {
-        Self { value: vec![0u8] }
+        Self { bytes: vec![0u8] }
     }
 }
 
@@ -60,7 +60,7 @@ impl TryFrom<&str> for Base16 {
 
     fn try_from(hex_string: &str) -> Result<Self, Box<dyn Error>> {
         if hex_string.is_empty() {
-            return Ok(Self { value: Vec::new() });
+            return Ok(Self { bytes: Vec::new() });
         }
         Base16::validate_hex_string(hex_string)?;
         let simplified_hex_string = Base16::simplify_hex_string(hex_string);
@@ -81,7 +81,7 @@ impl TryFrom<&str> for Base16 {
         }
 
         bytes.reverse();
-        Ok(Self { value: bytes })
+        Ok(Self { bytes })
     }
 }
 
@@ -103,21 +103,21 @@ mod tests {
     fn test_base16_from_base10() {
         assert_eq!(
             Base16::from(Base10::new("0".to_string())),
-            Base16 { value: vec![0u8] }
+            Base16 { bytes: vec![0u8] }
         );
     }
 
     #[test]
     fn test_base16_from_string() {
-        assert_eq!(Vec::<u8>::new(), Base16::try_from("").unwrap().value);
-        assert_eq!(vec![0u8], Base16::try_from("0").unwrap().value);
-        assert_eq!(vec![10u8], Base16::try_from("A").unwrap().value);
-        assert_eq!(vec![250u8], Base16::try_from("FA").unwrap().value);
-        assert_eq!(vec![255u8], Base16::try_from("FF").unwrap().value);
-        assert_eq!(vec![255u8, 1u8], Base16::try_from("1FF").unwrap().value);
-        assert_eq!(vec![255u8, 160u8], Base16::try_from("A0FF").unwrap().value);
-        assert_eq!(vec![255u8, 255u8], Base16::try_from("FFFF").unwrap().value);
-        assert_eq!(vec![0u8], Base16::try_from("0000").unwrap().value);
+        assert_eq!(Vec::<u8>::new(), Base16::try_from("").unwrap().bytes);
+        assert_eq!(vec![0u8], Base16::try_from("0").unwrap().bytes);
+        assert_eq!(vec![10u8], Base16::try_from("A").unwrap().bytes);
+        assert_eq!(vec![250u8], Base16::try_from("FA").unwrap().bytes);
+        assert_eq!(vec![255u8], Base16::try_from("FF").unwrap().bytes);
+        assert_eq!(vec![255u8, 1u8], Base16::try_from("1FF").unwrap().bytes);
+        assert_eq!(vec![255u8, 160u8], Base16::try_from("A0FF").unwrap().bytes);
+        assert_eq!(vec![255u8, 255u8], Base16::try_from("FFFF").unwrap().bytes);
+        assert_eq!(vec![0u8], Base16::try_from("0000").unwrap().bytes);
         assert!(Base16::try_from("qpwkdpq").is_err());
         assert!(Base16::try_from("x0001").is_err());
     }

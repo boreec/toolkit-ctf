@@ -67,7 +67,7 @@ mod tests {
         assert!(bytes.is_ok());
 
         assert_eq!(
-            encode_bytes_to_base64(bytes.unwrap().value),
+            encode_bytes_to_base64(bytes.unwrap().bytes),
             "crypto/Base+64+Encoding+is+Web+Safe/",
         );
     }
