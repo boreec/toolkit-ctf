@@ -104,7 +104,7 @@ mod tests {
     #[test]
     fn test_base16_from_base10() {
         assert_eq!(
-            Base16::from(Base10::try_from("720640".to_string())),
+            Base16::from(Base10::try_from("720640").unwrap()),
             Base16 {
                 bytes: vec![0u8, 255u8, 10u8]
             }

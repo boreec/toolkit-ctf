@@ -104,4 +104,9 @@ mod tests {
         assert!(Base10::validate_decimal_string("dsafhodhfo").is_err());
         assert!(Base10::validate_decimal_string("BADCAFE").is_err());
     }
+
+    #[test]
+    fn test_simplify_decimal_string() {
+        assert_eq!(Base10::simplify_decimal_string("0"), "0");
+    }
 }
