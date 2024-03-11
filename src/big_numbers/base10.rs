@@ -1,3 +1,5 @@
+use std::error::Error;
+
 #[derive(Debug)]
 pub struct Base10 {
     pub bytes: Vec<u8>,
@@ -54,7 +56,7 @@ impl TryFrom<&str> for Base10 {
         if decimal_string.is_empty() {
             return Ok(Self { bytes: Vec::new() });
         }
-        Base10::valide_decimal_string(decimal_string)?;
+        Base10::validate_decimal_string(decimal_string)?;
         let simplified_decimal_string =
             Base10::simplify_decimal_string(decimal_string);
 
