@@ -50,6 +50,33 @@ impl TryFrom<&str> for Base64 {
     }
 }
 
+impl Into<String> for Base64 {
+    fn into(self) -> String {
+        let mut result = String::new();
+
+        for chunk in self.bytes.chunks(3) {
+            let mut num = 0u32;
+
+            for (i, &byte) in chunk.iter().enumerate() {
+                num |= (byte as u32) << (16 - i * 8);
+            }
+
+            for i in 0..4 {
+                let index = ((num >> (18 - i * 6)) & 0b0011_1111) as usize;
+                result.push(BASE_64_CHARS[index]);
+            }
+
+            // Add padding '=' if needed
+            if chunk.len() < 3 {
+                let padding_count = 3 - chunk.len();
+                result.push_str(&"=".repeat(padding_count));
+            }
+        }
+
+        result
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

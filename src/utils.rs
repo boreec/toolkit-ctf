@@ -2,35 +2,6 @@ pub fn convert_ascii_integers_to_chars(ascii_integers: Vec<u8>) -> Vec<char> {
     ascii_integers.iter().map(|&i| i as char).collect()
 }
 
-pub fn encode_bytes_to_base64(bytes: Vec<u8>) -> String {
-    let mut result = String::new();
-    let base64_chars: Vec<char> =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-            .chars()
-            .collect();
-
-    for chunk in bytes.chunks(3) {
-        let mut num = 0u32;
-
-        for (i, &byte) in chunk.iter().enumerate() {
-            num |= (byte as u32) << (16 - i * 8);
-        }
-
-        for i in 0..4 {
-            let index = ((num >> (18 - i * 6)) & 0b0011_1111) as usize;
-            result.push(base64_chars[index]);
-        }
-
-        // Add padding '=' if needed
-        if chunk.len() < 3 {
-            let padding_count = 3 - chunk.len();
-            result.push_str(&"=".repeat(padding_count));
-        }
-    }
-
-    result
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -49,18 +20,5 @@ mod tests {
         ];
 
         assert_eq!(expected, convert_ascii_integers_to_chars(ascii_integers));
-    }
-
-    #[test]
-    fn test_encode_bytes_to_base64() {
-        let bytes = Base16::try_from(
-            "72bca9b68fc16ac7beeb8f849dca1d8a783e8acf9679bf9269f7bf",
-        );
-        assert!(bytes.is_ok());
-
-        assert_eq!(
-            encode_bytes_to_base64(bytes.unwrap().bytes),
-            "crypto/Base+64+Encoding+is+Web+Safe/",
-        );
     }
 }
