@@ -2,14 +2,6 @@ pub fn convert_ascii_integers_to_chars(ascii_integers: Vec<u8>) -> Vec<char> {
     ascii_integers.iter().map(|&i| i as char).collect()
 }
 
-pub fn base10_string_to_hex_string(base10_string: &str) -> String {
-    if let Ok(decimal) = base10_string.parse::<u128>() {
-        format!("{:X}", decimal)
-    } else {
-        String::from("Invalid input: Not a valid decimal number")
-    }
-}
-
 pub fn encode_bytes_to_base64(bytes: Vec<u8>) -> String {
     let mut result = String::new();
     let base64_chars: Vec<char> =
