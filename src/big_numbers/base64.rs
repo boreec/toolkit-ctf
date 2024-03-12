@@ -23,13 +23,30 @@ impl Base64 {
     }
 }
 
+impl PartialEq for Base64 {
+    fn eq(&self, other: &Self) -> bool {
+        if self.bytes.len() != other.bytes.len() {
+            return false;
+        }
+
+        let mut i = 0;
+        while i < self.bytes.len() && self.bytes[i] == other.bytes[i] {
+            i += 1;
+        }
+
+        i >= self.bytes.len()
+    }
+}
+
 impl TryFrom<&str> for Base64 {
     type Error = Box<dyn Error>;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         Base64::validate_base64_string(value)?;
 
-        Ok(Self { bytes: vec![] })
+        Ok(Self {
+            bytes: value.as_bytes().to_vec(),
+        })
     }
 }
 
@@ -45,5 +62,11 @@ mod tests {
         )
         .is_ok());
         assert!(Base64::validate_base64_string("???????").is_err());
+    }
+
+    #[test]
+    fn test_try_from_string() {
+        assert_eq!(Vec::<u8>::new(), Base64::try_from("").unwrap().bytes);
+        assert_eq!(vec![0u8], Base64::try_from("A").unwrap().bytes);
     }
 }
