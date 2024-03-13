@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use std::error::Error;
 
 const BASE_64_CHARS: &[char] = &[
@@ -48,6 +49,8 @@ impl TryFrom<&str> for Base64 {
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         Base64::validate_base64_string(value)?;
+
+        for chunk in value.chars().rev().chunks(4).into_iter() {}
 
         Ok(Self {
             bytes: value.as_bytes().to_vec(),
