@@ -99,6 +99,12 @@ mod tests {
     #[test]
     fn test_try_from_string() {
         assert_eq!(Vec::<u8>::new(), Base64::try_from("").unwrap().bytes);
-        assert_eq!(vec![0u8], Base64::try_from("A").unwrap().bytes);
+        assert_eq!(vec![65u8], Base64::try_from("QQ==").unwrap().bytes);
+        assert_eq!(vec![90u8], Base64::try_from("Wg==").unwrap().bytes);
+        assert_eq!(vec![65u8, 66u8], Base64::try_from("QUI=").unwrap().bytes);
+        assert_eq!(
+            vec![65u8, 66u8, 67u8],
+            Base64::try_from("QUJD").unwrap().bytes
+        );
     }
 }
