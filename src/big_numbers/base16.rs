@@ -1,6 +1,8 @@
 use crate::big_numbers::base10::Base10;
 use std::error::Error;
 
+use super::remove_leading_zeros;
+
 #[derive(Clone, Debug)]
 pub struct Base16 {
     pub bytes: Vec<u8>,
@@ -14,23 +16,6 @@ impl Base16 {
             }
         }
         Ok(())
-    }
-
-    pub fn simplify_hex_string(hex_string: &str) -> String {
-        let mut leading_zeros = 0;
-
-        for c in hex_string.chars() {
-            if c == '0' {
-                leading_zeros += 1;
-            } else {
-                break;
-            }
-        }
-
-        if leading_zeros == hex_string.len() {
-            return "0".to_string();
-        }
-        return hex_string[leading_zeros..].to_string();
     }
 }
 
@@ -65,7 +50,7 @@ impl TryFrom<&str> for Base16 {
             return Ok(Self { bytes: Vec::new() });
         }
         Base16::validate_hex_string(hex_string)?;
-        let simplified_hex_string = Base16::simplify_hex_string(hex_string);
+        let simplified_hex_string = remove_leading_zeros(hex_string);
 
         let padded_hex_string = if simplified_hex_string.len() % 2 == 0 {
             simplified_hex_string.to_owned()
@@ -124,14 +109,5 @@ mod tests {
         assert_eq!(vec![0u8], Base16::try_from("0000").unwrap().bytes);
         assert!(Base16::try_from("qpwkdpq").is_err());
         assert!(Base16::try_from("x0001").is_err());
-    }
-
-    #[test]
-    fn test_simplify_hex_string() {
-        assert_eq!("0", Base16::simplify_hex_string("0"));
-        assert_eq!("0", Base16::simplify_hex_string("00000"));
-        assert_eq!("FF", Base16::simplify_hex_string("0FF"));
-        assert_eq!("AF0000", Base16::simplify_hex_string("AF0000"));
-        assert_eq!("12AFAFD", Base16::simplify_hex_string("12AFAFD"));
     }
 }
