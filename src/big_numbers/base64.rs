@@ -14,6 +14,11 @@ pub struct Base64 {
 
 impl Base64 {
     pub fn validate_base64_string(base64_string: &str) -> Result<(), String> {
+        if base64_string.len() % 4 != 0 {
+            return Err(
+                "base64 string length must be divisible by 4".to_string()
+            );
+        }
         for c in base64_string.chars() {
             if !BASE_64_CHARS.contains(&c) {
                 return Err(format!("{} is not a correct digit in base 64", c));
