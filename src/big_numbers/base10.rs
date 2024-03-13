@@ -9,7 +9,7 @@ impl Base10 {
     pub fn validate_decimal_string(decimal_string: &str) -> Result<(), String> {
         for c in decimal_string.chars() {
             if !c.is_digit(10u32) {
-                return Err(format!("{} is not a correct digit in base 16", c));
+                return Err(format!("{} is not a correct digit in base 10", c));
             }
         }
         Ok(())
