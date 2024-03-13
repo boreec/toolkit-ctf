@@ -2,6 +2,10 @@ pub mod base10;
 pub mod base16;
 pub mod base64;
 
+/// Removes leading zeros from a string representing a number regardless of its
+/// base.
+/// "0101010101" -> "101010101"
+/// "00FF" -> "FF"
 pub fn remove_leading_zeros(number_string: &str) -> String {
     let mut leading_zeros = 0;
 
