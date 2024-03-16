@@ -10,6 +10,7 @@ Build or run example files:
 ```console
 cargo build --examples
 cargo run --example base16
+cargo run --example passphrase
 ```
 
 # data
