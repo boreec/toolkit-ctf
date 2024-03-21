@@ -54,8 +54,8 @@ impl TryFrom<&str> for Base10 {
                 &simplified_string[simplified_string.len() - slice_size..];
             let slice_value: u16 = slice_chars.parse()?;
             if slice_value > 255 {
-                bytes.push(255u8);
-                let remainder = slice_value - 255;
+                bytes.push((slice_value % 256u16) as u8);
+                let remainder = slice_value / 256;
                 simplified_string
                     .truncate(simplified_string.len() - slice_size);
                 simplified_string.push_str(&remainder.to_string());
@@ -91,6 +91,10 @@ mod tests {
         assert!(Base10::try_from("adjsakjdlas").is_err());
         assert_eq!(vec![0u8], Base10::try_from("0").unwrap().bytes);
         assert_eq!(vec![255u8], Base10::try_from("255").unwrap().bytes);
-        assert_eq!(vec![255u8, 1u8], Base10::try_from("256").unwrap().bytes);
+        assert_eq!(vec![0u8, 1u8], Base10::try_from("256").unwrap().bytes);
+        assert_eq!(vec![1u8, 1u8], Base10::try_from("257").unwrap().bytes);
+        assert_eq!(vec![0u8, 2u8], Base10::try_from("512").unwrap().bytes);
+        assert_eq!(vec![1u8, 2u8], Base10::try_from("513").unwrap().bytes);
+        assert_eq!(vec![9u8, 3u8], Base10::try_from("777").unwrap().bytes);
     }
 }
