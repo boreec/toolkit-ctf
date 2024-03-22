@@ -11,6 +11,7 @@ Build or run example files:
 cargo build --examples
 cargo run --example base16
 cargo run --example passphrase
+cargo run --example primality
 ```
 
 # data
