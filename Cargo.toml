@@ -6,6 +6,7 @@ edition = "2021"
 
 [dependencies]
 itertools = "0.12.1"
+num-bigint = "0.4.4"
 rand = "0.8.5"
 
 [[bin]]

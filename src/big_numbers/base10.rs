@@ -41,30 +41,26 @@ impl TryFrom<&str> for Base10 {
         if decimal_string.is_empty() {
             return Ok(Self { bytes: Vec::new() });
         }
-        Base10::validate_decimal_string(decimal_string)?;
-        let mut simplified_string = remove_leading_zeros(decimal_string);
 
-        // rough estimate
-        let bytes_capacity = simplified_string.len() as f64 * 0.3;
-        let mut bytes = Vec::with_capacity(bytes_capacity as usize);
-
-        while !simplified_string.is_empty() {
-            let slice_size = 3.min(simplified_string.len());
-            let slice_chars =
-                &simplified_string[simplified_string.len() - slice_size..];
-            let slice_value: u16 = slice_chars.parse()?;
-            if slice_value > 255 {
-                bytes.push((slice_value % 256u16) as u8);
-                let remainder = slice_value / 256;
-                simplified_string
-                    .truncate(simplified_string.len() - slice_size);
-                simplified_string.push_str(&remainder.to_string());
-            } else {
-                bytes.push(slice_value as u8);
-                simplified_string
-                    .truncate(simplified_string.len() - slice_size);
-            }
+        if decimal_string == "0" {
+            return Ok(Self { bytes: vec![0u8] });
         }
+
+        Base10::validate_decimal_string(decimal_string)?;
+        let simplified_string = remove_leading_zeros(decimal_string);
+
+        let num: num_bigint::BigInt = simplified_string.parse().unwrap();
+
+        let mut bytes: Vec<u8> = num
+            .iter_u32_digits()
+            .into_iter()
+            .map(|v| v.to_le_bytes().into_iter())
+            .flatten()
+            .rev()
+            .skip_while(|v| *v == 0)
+            .collect();
+
+        bytes.reverse();
 
         Ok(Self { bytes })
     }
@@ -96,5 +92,9 @@ mod tests {
         assert_eq!(vec![0u8, 2u8], Base10::try_from("512").unwrap().bytes);
         assert_eq!(vec![1u8, 2u8], Base10::try_from("513").unwrap().bytes);
         assert_eq!(vec![9u8, 3u8], Base10::try_from("777").unwrap().bytes);
+        assert_eq!(
+            vec![0u8, 0u8, 1u8],
+            Base10::try_from("65536").unwrap().bytes
+        );
     }
 }
