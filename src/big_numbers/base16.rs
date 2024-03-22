@@ -157,5 +157,14 @@ mod tests {
             Base16 { bytes: vec![0u8] },
             Base16::xor(vec![Base16 { bytes: vec![0u8] }]).unwrap()
         );
+        // identity
+        assert_eq!(
+            Base16 { bytes: vec![10u8] },
+            Base16::xor(vec![
+                Base16 { bytes: vec![0u8] },
+                Base16 { bytes: vec![10u8] }
+            ])
+            .unwrap()
+        );
     }
 }
