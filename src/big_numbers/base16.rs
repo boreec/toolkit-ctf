@@ -23,6 +23,38 @@ impl Base16 {
         bytes.reverse();
         return bytes;
     }
+
+    pub fn xor(nums: Vec<Base16>) -> Result<Self, String> {
+        if nums.is_empty() {
+            return Err("no base16 numbers supplied".to_string());
+        }
+        if nums.len() == 1 {
+            return Ok(nums[0].clone());
+        }
+
+        // find the longest number
+        let mut max_bytes = nums[0].bytes.len();
+        for n in &nums {
+            if n.bytes.len() > max_bytes {
+                max_bytes = n.bytes.len();
+            }
+        }
+
+        let mut bytes: Vec<u8> = Vec::with_capacity(max_bytes);
+        for b in 0..max_bytes {
+            let mut byte = 0;
+            for n in &nums {
+                if n.bytes.len() < b {
+                    byte ^= 0;
+                } else {
+                    byte ^= n.bytes[b];
+                }
+            }
+            bytes.push(byte);
+        }
+
+        Ok(Self { bytes })
+    }
 }
 
 impl PartialEq for Base16 {
@@ -115,5 +147,15 @@ mod tests {
         assert_eq!(vec![0u8], Base16::try_from("0000").unwrap().bytes);
         assert!(Base16::try_from("qpwkdpq").is_err());
         assert!(Base16::try_from("x0001").is_err());
+    }
+
+    #[test]
+    fn test_base16_xor() {
+        assert!(Base16::xor(vec![]).is_err());
+        assert!(Base16::xor(vec![Base16 { bytes: vec![0u8] }]).is_ok());
+        assert_eq!(
+            Base16 { bytes: vec![0u8] },
+            Base16::xor(vec![Base16 { bytes: vec![0u8] }]).unwrap()
+        );
     }
 }

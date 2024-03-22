@@ -42,10 +42,36 @@ fn xor0() {
     println!("xor0: \"crypto{{{flag}}}\"");
 }
 
+fn xor1() {
+    let k1 = Base16::try_from(
+        "a6c8b6733c9b22de7bc0253266a3867df55acde8635e19c73313",
+    )
+    .unwrap()
+    .as_bytes();
+    let k1xk2 = Base16::try_from(
+        "37dcb292030faa90d07eec17e3b1c6d8daf94c35d4c9191a5e1e",
+    )
+    .unwrap()
+    .as_bytes();
+    let k2xk3 = Base16::try_from(
+        "c1545756687e7573db23aa1c3452a098b71a7fbf0fddddde5fc1",
+    )
+    .unwrap()
+    .as_bytes();
+    let fxk1xk2xk3 = Base16::try_from(
+        "04ee9855208a2cd59091d04767ae47963170d1660df7f56f5faf",
+    )
+    .unwrap()
+    .as_bytes();
+
+    println!("xor1: todo");
+}
+
 fn main() {
     enc1();
     enc2();
     enc3();
     enc4();
     xor0();
+    xor1();
 }
