@@ -1,4 +1,4 @@
-use itertools::Itertools;
+use base64::prelude::*;
 use std::error::Error;
 
 const BASE_64_CHARS: &[char] = &[
@@ -8,6 +8,8 @@ const BASE_64_CHARS: &[char] = &[
     't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
     '8', '9', '+', '/',
 ];
+
+const BASE_64_PAD: char = '=';
 
 pub struct Base64 {
     bytes: Vec<u8>,
@@ -21,7 +23,7 @@ impl Base64 {
             );
         }
         for c in base64_string.chars() {
-            if !BASE_64_CHARS.contains(&c) {
+            if !BASE_64_CHARS.contains(&c) && c != BASE_64_PAD {
                 return Err(format!("{} is not a correct digit in base 64", c));
             }
         }
@@ -50,10 +52,8 @@ impl TryFrom<&str> for Base64 {
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         Base64::validate_base64_string(value)?;
 
-        for chunk in value.chars().rev().chunks(4).into_iter() {}
-
         Ok(Self {
-            bytes: value.as_bytes().to_vec(),
+            bytes: BASE64_STANDARD.decode(value)?,
         })
     }
 }
