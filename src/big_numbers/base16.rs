@@ -17,6 +17,12 @@ impl Base16 {
         }
         Ok(())
     }
+
+    pub fn as_bytes(&self) -> Vec<u8> {
+        let mut bytes = self.bytes.clone();
+        bytes.reverse();
+        return bytes;
+    }
 }
 
 impl PartialEq for Base16 {
