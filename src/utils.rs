@@ -5,7 +5,6 @@ pub fn convert_ascii_integers_to_chars(ascii_integers: Vec<u8>) -> Vec<char> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::big_numbers::base16::Base16;
 
     #[test]
     fn test_convert_ascii_integers_to_chars() {
