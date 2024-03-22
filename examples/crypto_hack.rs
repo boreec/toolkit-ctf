@@ -37,9 +37,15 @@ fn enc4() {
     println!("enc4: {:?}", chars.iter().collect::<String>());
 }
 
+fn xor0() {
+    let flag: String = "label".bytes().map(|x| (x ^ 13) as char).collect();
+    println!("xor0: \"crypto{{{flag}}}\"");
+}
+
 fn main() {
     enc1();
     enc2();
     enc3();
     enc4();
+    xor0();
 }
