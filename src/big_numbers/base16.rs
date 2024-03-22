@@ -168,6 +168,14 @@ mod tests {
     }
 
     #[test]
+    fn test_base16_xor() {
+        // identity
+        let a = Base16 { bytes: vec![10u8] };
+        let zero = Base16 { bytes: vec![0u8] };
+        assert_eq!(a, a.xor(&zero));
+    }
+
+    #[test]
     fn test_base16_xor_numbers() {
         assert!(Base16::xor_numbers(vec![]).is_err());
         assert!(Base16::xor_numbers(vec![Base16 { bytes: vec![0u8] }]).is_ok());
