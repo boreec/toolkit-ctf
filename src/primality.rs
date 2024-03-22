@@ -3,7 +3,7 @@ pub trait PrimalityTest {
 }
 
 pub mod primality_test_algorithms {
-    #[derive(PartialEq, Eq)]
+    #[derive(Debug, PartialEq, Eq)]
     pub enum DivisionUpperBound {
         Whole,
         Half,
