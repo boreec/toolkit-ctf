@@ -24,9 +24,23 @@ impl Base16 {
         return bytes;
     }
 
-    // pub fn xor(&self, other: &Self) -> Self {
-    //     Self { bytes: vec![] }
-    // }
+    pub fn xor(&self, other: &Self) -> Self {
+        let max_bytes = self.bytes.len().max(other.bytes.len());
+        let mut bytes = Vec::with_capacity(max_bytes);
+
+        for i in 0..max_bytes {
+            let mut byte = 0;
+            if self.bytes.len() <= i {
+                byte ^= other.bytes[i];
+            } else if other.bytes.len() <= i {
+                byte ^= self.bytes[i];
+            } else {
+                byte = self.bytes[i] ^ other.bytes[i];
+            }
+            bytes.push(byte);
+        }
+        Self { bytes }
+    }
 
     pub fn xor_numbers(nums: Vec<Base16>) -> Result<Self, String> {
         if nums.is_empty() {
@@ -193,7 +207,7 @@ mod tests {
             Base16 {
                 bytes: vec![10u8, 0u8, 10u8]
             },
-            Base16::xor(vec![
+            Base16::xor_numbers(vec![
                 Base16 { bytes: vec![10u8] },
                 Base16 {
                     bytes: vec![10u8, 0u8]
