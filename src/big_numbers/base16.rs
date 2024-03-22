@@ -44,7 +44,7 @@ impl Base16 {
         for b in 0..max_bytes {
             let mut byte = 0;
             for n in &nums {
-                if n.bytes.len() < b {
+                if n.bytes.len() <= b {
                     byte ^= 0;
                 } else {
                     byte ^= n.bytes[b];
@@ -184,5 +184,27 @@ mod tests {
             ])
             .unwrap()
         );
+
+        assert_eq!(
+            Base16 {
+                bytes: vec![10u8, 0u8, 10u8]
+            },
+            Base16::xor(vec![
+                Base16 { bytes: vec![10u8] },
+                Base16 {
+                    bytes: vec![10u8, 0u8]
+                },
+                Base16 {
+                    bytes: vec![10u8, 0u8]
+                },
+                Base16 {
+                    bytes: vec![10u8, 10u8]
+                },
+                Base16 {
+                    bytes: vec![10u8, 10u8, 10u8]
+                }
+            ])
+            .unwrap()
+        )
     }
 }
