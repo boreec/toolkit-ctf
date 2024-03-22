@@ -24,7 +24,11 @@ impl Base16 {
         return bytes;
     }
 
-    pub fn xor(nums: Vec<Base16>) -> Result<Self, String> {
+    // pub fn xor(&self, other: &Self) -> Self {
+    //     Self { bytes: vec![] }
+    // }
+
+    pub fn xor_numbers(nums: Vec<Base16>) -> Result<Self, String> {
         if nums.is_empty() {
             return Err("no base16 numbers supplied".to_string());
         }
@@ -150,17 +154,17 @@ mod tests {
     }
 
     #[test]
-    fn test_base16_xor() {
-        assert!(Base16::xor(vec![]).is_err());
-        assert!(Base16::xor(vec![Base16 { bytes: vec![0u8] }]).is_ok());
+    fn test_base16_xor_numbers() {
+        assert!(Base16::xor_numbers(vec![]).is_err());
+        assert!(Base16::xor_numbers(vec![Base16 { bytes: vec![0u8] }]).is_ok());
         assert_eq!(
             Base16 { bytes: vec![0u8] },
-            Base16::xor(vec![Base16 { bytes: vec![0u8] }]).unwrap()
+            Base16::xor_numbers(vec![Base16 { bytes: vec![0u8] }]).unwrap()
         );
         // identity
         assert_eq!(
             Base16 { bytes: vec![10u8] },
-            Base16::xor(vec![
+            Base16::xor_numbers(vec![
                 Base16 { bytes: vec![0u8] },
                 Base16 { bytes: vec![10u8] }
             ])
@@ -169,7 +173,7 @@ mod tests {
         // self inverse
         assert_eq!(
             Base16 { bytes: vec![0u8] },
-            Base16::xor(vec![
+            Base16::xor_numbers(vec![
                 Base16 { bytes: vec![10u8] },
                 Base16 { bytes: vec![10u8] }
             ])
@@ -177,7 +181,7 @@ mod tests {
         );
         assert_eq!(
             Base16 { bytes: vec![10u8] },
-            Base16::xor(vec![
+            Base16::xor_numbers(vec![
                 Base16 { bytes: vec![10u8] },
                 Base16 { bytes: vec![10u8] },
                 Base16 { bytes: vec![10u8] }

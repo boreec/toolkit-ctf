@@ -43,7 +43,7 @@ fn xor0() {
 }
 
 fn xor1() {
-    let flag = Base16::xor(vec![
+    let flag = Base16::xor_numbers(vec![
         Base16::try_from(
             "04ee9855208a2cd59091d04767ae47963170d1660df7f56f5faf",
         )
@@ -63,6 +63,22 @@ fn xor1() {
     println!("xor1: {:?}", chars.iter().collect::<String>());
 }
 
+fn xorkey0() {
+    let b16 = Base16::try_from(
+        "73626960647f6b206821204f21254f7d694f7624662065622127234f726927756d",
+    )
+    .unwrap();
+    let mut i = 0u8;
+    while i <= 255u8 {
+        let xor =
+            Base16::xor_numbers(vec![Base16 { bytes: vec![i] }, b16.clone()]);
+        let chars = convert_ascii_integers_to_chars(xor.unwrap().bytes);
+        println!("{:?}", chars.iter().collect::<String>());
+        i += 1;
+    }
+    todo!();
+}
+
 fn main() {
     enc1();
     enc2();
@@ -70,4 +86,5 @@ fn main() {
     enc4();
     xor0();
     xor1();
+    xorkey0();
 }
