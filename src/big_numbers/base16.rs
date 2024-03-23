@@ -21,7 +21,7 @@ impl Base16 {
     pub fn as_bytes(&self) -> Vec<u8> {
         let mut bytes = self.bytes.clone();
         bytes.reverse();
-        return bytes;
+        bytes
     }
 
     pub fn xor(&self, other: &Self) -> Self {
