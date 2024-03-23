@@ -32,7 +32,7 @@ pub fn generate_passphrase(
     while passphrase.len() < min_length {
         let random_index = rng.gen_range(0..words_list.len());
         let random_word: String = words_list[random_index].clone();
-        passphrase = passphrase + random_word.as_str();
+        passphrase += random_word.as_str();
     }
     Ok(passphrase.to_string())
 }
