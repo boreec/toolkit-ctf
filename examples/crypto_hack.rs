@@ -64,19 +64,23 @@ fn xor1() {
 }
 
 fn xorkey0() {
-    let b16 = Base16::try_from(
-        "73626960647f6b206821204f21254f7d694f7624662065622127234f726927756d",
-    )
-    .unwrap();
+    let hex_string =
+        "73626960647f6b206821204f21254f7d694f7624662065622127234f726927756d";
+    let b16 = Base16::try_from(hex_string).unwrap();
+    let mut decoded = String::new();
     let mut i = 0u8;
-    while i <= 255u8 {
-        let xor =
-            Base16::xor_numbers(vec![Base16 { bytes: vec![i] }, b16.clone()]);
-        let chars = convert_ascii_integers_to_chars(xor.unwrap().as_bytes());
-        println!("{:?}", chars.iter().collect::<String>());
+    while i <= 255u8 && !decoded.contains("crypto{") {
+        let xor = b16.xor(&Base16 {
+            bytes: vec![i; hex_string.len() / 2],
+        });
+        let chars = convert_ascii_integers_to_chars(xor.as_bytes());
+        decoded = chars.iter().collect();
+        if decoded.contains("crypto{") {
+            break;
+        }
         i += 1;
     }
-    todo!();
+    println!("xorkey0: {:?}", decoded);
 }
 
 fn main() {
