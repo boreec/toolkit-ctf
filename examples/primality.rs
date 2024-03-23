@@ -39,8 +39,7 @@ fn main() {
     run_naive_trial_division(&NaiveTrialDivision { increment: 2, upper_bound: toolkit_ctf::primality::primality_test_algorithms::DivisionUpperBound::Half });
     run_naive_trial_division(&NaiveTrialDivision { increment: 2, upper_bound: toolkit_ctf::primality::primality_test_algorithms::DivisionUpperBound::Square });
 
-    println!("");
-    println!("=== 6k+i division ===");
+    println!("\n=== 6k+i division ===");
     run_six_k_one_division(&SixKOneDivision { upper_bound: toolkit_ctf::primality::primality_test_algorithms::DivisionUpperBound::Whole });
     run_six_k_one_division(&SixKOneDivision { upper_bound: toolkit_ctf::primality::primality_test_algorithms::DivisionUpperBound::Half});
     run_six_k_one_division(&SixKOneDivision { upper_bound: toolkit_ctf::primality::primality_test_algorithms::DivisionUpperBound::Square });
