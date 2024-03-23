@@ -173,6 +173,9 @@ mod tests {
         let a = Base16 { bytes: vec![10u8] };
         let zero = Base16 { bytes: vec![0u8] };
         assert_eq!(a, a.xor(&zero));
+
+        // self inverse
+        assert_eq!(zero, a.xor(&a));
     }
 
     #[test]

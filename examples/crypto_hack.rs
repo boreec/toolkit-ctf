@@ -72,7 +72,7 @@ fn xorkey0() {
     while i <= 255u8 {
         let xor =
             Base16::xor_numbers(vec![Base16 { bytes: vec![i] }, b16.clone()]);
-        let chars = convert_ascii_integers_to_chars(xor.unwrap().bytes);
+        let chars = convert_ascii_integers_to_chars(xor.unwrap().as_bytes());
         println!("{:?}", chars.iter().collect::<String>());
         i += 1;
     }
