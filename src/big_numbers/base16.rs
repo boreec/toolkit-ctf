@@ -11,7 +11,7 @@ pub struct Base16 {
 impl Base16 {
     pub fn validate_hex_string(hex_string: &str) -> Result<(), String> {
         for c in hex_string.chars() {
-            if !c.is_digit(16u32) {
+            if !c.is_ascii_hexdigit() {
                 return Err(format!("{} is not a correct digit in base 16", c));
             }
         }
