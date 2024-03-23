@@ -30,7 +30,7 @@ impl PartialEq for Base10 {
             }
         }
 
-        return true;
+        true
     }
 }
 
