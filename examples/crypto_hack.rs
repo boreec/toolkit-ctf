@@ -83,6 +83,10 @@ fn xorkey0() {
     println!("xorkey0: {:?}", decoded);
 }
 
+fn xorkey1() {
+    todo!("xorkey1");
+}
+
 fn main() {
     enc1();
     enc2();
@@ -91,4 +95,5 @@ fn main() {
     xor0();
     xor1();
     xorkey0();
+    xorkey1();
 }
