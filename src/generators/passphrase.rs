@@ -24,7 +24,7 @@ pub fn load_frequency_list() -> Result<Vec<String>, io::Error> {
 
 pub fn generate_passphrase(
     min_length: usize,
-    words_list: &Vec<String>,
+    words_list: &[String],
 ) -> Result<String, Box<dyn Error>> {
     let mut rng = rand::thread_rng();
     let mut passphrase = String::new();
