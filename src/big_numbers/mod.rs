@@ -20,7 +20,7 @@ pub fn remove_leading_zeros(number_string: &str) -> String {
     if leading_zeros == number_string.len() {
         return "0".to_string();
     }
-    return number_string[leading_zeros..].to_string();
+    number_string[leading_zeros..].to_string()
 }
 
 #[cfg(test)]
