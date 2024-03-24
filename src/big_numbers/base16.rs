@@ -3,6 +3,7 @@ use std::error::Error;
 
 use super::remove_leading_zeros;
 
+#[derive(PartialEq, Eq)]
 pub enum XorStrategy {
     Repeating,
     Truncating,
@@ -33,20 +34,29 @@ impl Base16 {
         bytes
     }
 
-    pub fn xor(&self, other: &Self) -> Self {
+    pub fn xor(&self, other: &Self, xor_strategy: &XorStrategy) -> Self {
         let max_bytes = self.be_bytes.len().max(other.be_bytes.len());
         let mut bytes = Vec::with_capacity(max_bytes);
-
-        for i in 0..max_bytes {
-            let mut byte = 0;
-            if self.be_bytes.len() <= i {
-                byte ^= other.be_bytes[i];
-            } else if other.be_bytes.len() <= i {
-                byte ^= self.be_bytes[i];
-            } else {
-                byte = self.be_bytes[i] ^ other.be_bytes[i];
+        match xor_strategy {
+            XorStrategy::Repeating => {}
+            XorStrategy::Truncating => {}
+            XorStrategy::PadWithZero | XorStrategy::PadWithOne => {
+                for i in 0..max_bytes {
+                    let mut byte = if *xor_strategy == XorStrategy::PadWithOne {
+                        255u8
+                    } else {
+                        0u8
+                    };
+                    if self.be_bytes.len() <= i {
+                        byte ^= other.be_bytes[i];
+                    } else if other.be_bytes.len() <= i {
+                        byte ^= self.be_bytes[i];
+                    } else {
+                        byte = self.be_bytes[i] ^ other.be_bytes[i];
+                    }
+                    bytes.push(byte);
+                }
             }
-            bytes.push(byte);
         }
         Self { be_bytes: bytes }
     }
