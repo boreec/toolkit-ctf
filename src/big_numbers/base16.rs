@@ -53,7 +53,7 @@ impl Base16 {
             }
             XorStrategy::Truncating => {
                 for i in 0..max_bytes {
-                    if self.be_bytes.len() <= i || other.be_bytes.len() < i {
+                    if self.be_bytes.len() <= i || other.be_bytes.len() <= i {
                         break;
                     } else {
                         bytes.push(self.be_bytes[i] ^ other.be_bytes[i]);
@@ -216,7 +216,19 @@ mod tests {
 
     #[test]
     fn test_base16_xor_truncating() {
-        todo!();
+        let a = Base16 {
+            be_bytes: vec![0u8, 10u8, 0u8, 10u8],
+        };
+        let b = Base16 {
+            be_bytes: vec![0u8, 0u8, 10u8],
+        };
+
+        assert_eq!(
+            Base16 {
+                be_bytes: vec![0u8, 10u8, 10u8]
+            },
+            a.xor(&b, &XorStrategy::Truncating)
+        );
     }
 
     #[test]
