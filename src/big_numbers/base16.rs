@@ -19,7 +19,7 @@ impl Base16 {
         Ok(())
     }
 
-    pub fn as_bytes(&self) -> Vec<u8> {
+    pub fn as_le_bytes(&self) -> Vec<u8> {
         let mut bytes = self.bytes.clone();
         bytes.reverse();
         bytes

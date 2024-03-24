@@ -19,21 +19,21 @@ fn enc1() {
 fn enc2() {
     let hex = "63727970746f7b596f755f77696c6c5f62655f776f726b696e675f776974685f6865785f737472696e67735f615f6c6f747d";
     let b16 = Base16::try_from(hex).unwrap();
-    let chars = convert_ascii_integers_to_chars(b16.as_bytes());
+    let chars = convert_ascii_integers_to_chars(b16.as_le_bytes());
     println!("enc2: {:?}", chars.iter().collect::<String>());
 }
 
 fn enc3() {
     let hex = "72bca9b68fc16ac7beeb8f849dca1d8a783e8acf9679bf9269f7bf";
     let b16 = Base16::try_from(hex).unwrap();
-    let b64 = BASE64_STANDARD.encode(b16.as_bytes());
+    let b64 = BASE64_STANDARD.encode(b16.as_le_bytes());
     println!("enc3: {:?}", b64);
 }
 
 fn enc4() {
     let dec = "11515195063862318899931685488813747395775516287289682636499965282714637259206269";
     let b16 = Base16::from(Base10::try_from(dec).unwrap());
-    let chars = convert_ascii_integers_to_chars(b16.as_bytes());
+    let chars = convert_ascii_integers_to_chars(b16.as_le_bytes());
     println!("enc4: {:?}", chars.iter().collect::<String>());
 }
 
@@ -59,7 +59,7 @@ fn xor1() {
     ])
     .unwrap();
 
-    let chars = convert_ascii_integers_to_chars(flag.as_bytes());
+    let chars = convert_ascii_integers_to_chars(flag.as_le_bytes());
     println!("xor1: {:?}", chars.iter().collect::<String>());
 }
 
@@ -73,7 +73,7 @@ fn xorkey0() {
         let xor = b16.xor(&Base16 {
             bytes: vec![i; hex_string.len() / 2],
         });
-        let chars = convert_ascii_integers_to_chars(xor.as_bytes());
+        let chars = convert_ascii_integers_to_chars(xor.as_le_bytes());
         decoded = chars.iter().collect();
         if decoded.contains("crypto{") {
             break;
