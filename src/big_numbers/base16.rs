@@ -5,6 +5,7 @@ use super::remove_leading_zeros;
 
 #[derive(Clone, Debug)]
 pub struct Base16 {
+    /// bytes stored in a big endian order
     pub bytes: Vec<u8>,
 }
 
