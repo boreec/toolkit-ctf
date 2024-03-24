@@ -1,7 +1,7 @@
 extern crate toolkit_ctf;
 
 use toolkit_ctf::big_numbers::base10::Base10;
-use toolkit_ctf::big_numbers::base16::Base16;
+use toolkit_ctf::big_numbers::base16::{Base16, XorStrategy};
 use toolkit_ctf::utils::convert_ascii_integers_to_chars;
 
 use base64::prelude::*;
@@ -70,9 +70,12 @@ fn xorkey0() {
     let mut decoded = String::new();
     let mut i = 0u8;
     while i <= 255u8 && !decoded.contains("crypto{") {
-        let xor = b16.xor(&Base16 {
-            be_bytes: vec![i; hex_string.len() / 2],
-        });
+        let xor = b16.xor(
+            &Base16 {
+                be_bytes: vec![i; hex_string.len() / 2],
+            },
+            &XorStrategy::Repeating,
+        );
         let chars = convert_ascii_integers_to_chars(xor.as_le_bytes());
         decoded = chars.iter().collect();
         if decoded.contains("crypto{") {

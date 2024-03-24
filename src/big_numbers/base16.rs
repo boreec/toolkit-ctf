@@ -231,7 +231,16 @@ mod tests {
 
     #[test]
     fn test_base16_xor_pad_with_one() {
-        todo!();
+        let a = Base16 {
+            be_bytes: vec![10u8],
+        };
+
+        assert_eq!(
+            Base16 {
+                be_bytes: vec![245u8]
+            },
+            a.xor(&Base16 { be_bytes: vec![] }, &XorStrategy::PadWithOne)
+        );
     }
 
     #[test]
