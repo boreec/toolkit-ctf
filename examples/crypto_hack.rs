@@ -71,7 +71,7 @@ fn xorkey0() {
     let mut i = 0u8;
     while i <= 255u8 && !decoded.contains("crypto{") {
         let xor = b16.xor(&Base16 {
-            bytes: vec![i; hex_string.len() / 2],
+            be_bytes: vec![i; hex_string.len() / 2],
         });
         let chars = convert_ascii_integers_to_chars(xor.as_le_bytes());
         decoded = chars.iter().collect();

@@ -6,7 +6,7 @@ use super::remove_leading_zeros;
 #[derive(Clone, Debug)]
 pub struct Base16 {
     /// bytes stored in a big endian order
-    pub bytes: Vec<u8>,
+    pub be_bytes: Vec<u8>,
 }
 
 impl Base16 {
@@ -21,27 +21,27 @@ impl Base16 {
 
     /// return inner bytes in a lower endian order
     pub fn as_le_bytes(&self) -> Vec<u8> {
-        let mut bytes = self.bytes.clone();
+        let mut bytes = self.be_bytes.clone();
         bytes.reverse();
         bytes
     }
 
     pub fn xor(&self, other: &Self) -> Self {
-        let max_bytes = self.bytes.len().max(other.bytes.len());
+        let max_bytes = self.be_bytes.len().max(other.be_bytes.len());
         let mut bytes = Vec::with_capacity(max_bytes);
 
         for i in 0..max_bytes {
             let mut byte = 0;
-            if self.bytes.len() <= i {
-                byte ^= other.bytes[i];
-            } else if other.bytes.len() <= i {
-                byte ^= self.bytes[i];
+            if self.be_bytes.len() <= i {
+                byte ^= other.be_bytes[i];
+            } else if other.be_bytes.len() <= i {
+                byte ^= self.be_bytes[i];
             } else {
-                byte = self.bytes[i] ^ other.bytes[i];
+                byte = self.be_bytes[i] ^ other.be_bytes[i];
             }
             bytes.push(byte);
         }
-        Self { bytes }
+        Self { be_bytes: bytes }
     }
 
     pub fn xor_numbers(nums: Vec<Base16>) -> Result<Self, String> {
@@ -53,10 +53,10 @@ impl Base16 {
         }
 
         // find the longest number
-        let mut max_bytes = nums[0].bytes.len();
+        let mut max_bytes = nums[0].be_bytes.len();
         for n in &nums {
-            if n.bytes.len() > max_bytes {
-                max_bytes = n.bytes.len();
+            if n.be_bytes.len() > max_bytes {
+                max_bytes = n.be_bytes.len();
             }
         }
 
@@ -64,38 +64,38 @@ impl Base16 {
         for b in 0..max_bytes {
             let mut byte = 0;
             for n in &nums {
-                if n.bytes.len() <= b {
+                if n.be_bytes.len() <= b {
                     byte ^= 0;
                 } else {
-                    byte ^= n.bytes[b];
+                    byte ^= n.be_bytes[b];
                 }
             }
             bytes.push(byte);
         }
 
-        Ok(Self { bytes })
+        Ok(Self { be_bytes: bytes })
     }
 }
 
 impl PartialEq for Base16 {
     fn eq(&self, other: &Self) -> bool {
-        if self.bytes.len() != other.bytes.len() {
+        if self.be_bytes.len() != other.be_bytes.len() {
             return false;
         }
 
         let mut i = 0;
-        while i < self.bytes.len() && self.bytes[i] == other.bytes[i] {
+        while i < self.be_bytes.len() && self.be_bytes[i] == other.be_bytes[i] {
             i += 1;
         }
 
-        i >= self.bytes.len()
+        i >= self.be_bytes.len()
     }
 }
 
 impl From<Base10> for Base16 {
     fn from(decimal_number: Base10) -> Self {
         Self {
-            bytes: decimal_number.bytes,
+            be_bytes: decimal_number.bytes,
         }
     }
 }
@@ -105,7 +105,9 @@ impl TryFrom<&str> for Base16 {
 
     fn try_from(hex_string: &str) -> Result<Self, Box<dyn Error>> {
         if hex_string.is_empty() {
-            return Ok(Self { bytes: Vec::new() });
+            return Ok(Self {
+                be_bytes: Vec::new(),
+            });
         }
         Base16::validate_hex_string(hex_string)?;
         let simplified_hex_string = remove_leading_zeros(hex_string);
@@ -126,7 +128,7 @@ impl TryFrom<&str> for Base16 {
         }
 
         bytes.reverse();
-        Ok(Self { bytes })
+        Ok(Self { be_bytes: bytes })
     }
 }
 
@@ -149,22 +151,28 @@ mod tests {
         assert_eq!(
             Base16::from(Base10::try_from("720640").unwrap()),
             Base16 {
-                bytes: vec![0u8, 255u8, 10u8]
+                be_bytes: vec![0u8, 255u8, 10u8]
             }
         );
     }
 
     #[test]
     fn test_base16_from_string() {
-        assert_eq!(Vec::<u8>::new(), Base16::try_from("").unwrap().bytes);
-        assert_eq!(vec![0u8], Base16::try_from("0").unwrap().bytes);
-        assert_eq!(vec![10u8], Base16::try_from("A").unwrap().bytes);
-        assert_eq!(vec![250u8], Base16::try_from("FA").unwrap().bytes);
-        assert_eq!(vec![255u8], Base16::try_from("FF").unwrap().bytes);
-        assert_eq!(vec![255u8, 1u8], Base16::try_from("1FF").unwrap().bytes);
-        assert_eq!(vec![255u8, 160u8], Base16::try_from("A0FF").unwrap().bytes);
-        assert_eq!(vec![255u8, 255u8], Base16::try_from("FFFF").unwrap().bytes);
-        assert_eq!(vec![0u8], Base16::try_from("0000").unwrap().bytes);
+        assert_eq!(Vec::<u8>::new(), Base16::try_from("").unwrap().be_bytes);
+        assert_eq!(vec![0u8], Base16::try_from("0").unwrap().be_bytes);
+        assert_eq!(vec![10u8], Base16::try_from("A").unwrap().be_bytes);
+        assert_eq!(vec![250u8], Base16::try_from("FA").unwrap().be_bytes);
+        assert_eq!(vec![255u8], Base16::try_from("FF").unwrap().be_bytes);
+        assert_eq!(vec![255u8, 1u8], Base16::try_from("1FF").unwrap().be_bytes);
+        assert_eq!(
+            vec![255u8, 160u8],
+            Base16::try_from("A0FF").unwrap().be_bytes
+        );
+        assert_eq!(
+            vec![255u8, 255u8],
+            Base16::try_from("FFFF").unwrap().be_bytes
+        );
+        assert_eq!(vec![0u8], Base16::try_from("0000").unwrap().be_bytes);
         assert!(Base16::try_from("qpwkdpq").is_err());
         assert!(Base16::try_from("x0001").is_err());
     }
@@ -172,28 +180,32 @@ mod tests {
     #[test]
     fn test_base16_xor() {
         // identity
-        let a = Base16 { bytes: vec![10u8] };
-        let zero = Base16 { bytes: vec![0u8] };
+        let a = Base16 {
+            be_bytes: vec![10u8],
+        };
+        let zero = Base16 {
+            be_bytes: vec![0u8],
+        };
         assert_eq!(a, a.xor(&zero));
 
         // self inverse
         assert_eq!(zero, a.xor(&a));
 
         let b = Base16 {
-            bytes: vec![10u8, 0u8, 10u8],
+            be_bytes: vec![10u8, 0u8, 10u8],
         };
         let c = Base16 {
-            bytes: vec![10u8, 10u8],
+            be_bytes: vec![10u8, 10u8],
         };
         assert_eq!(
             Base16 {
-                bytes: vec![0u8, 10u8, 10u8]
+                be_bytes: vec![0u8, 10u8, 10u8]
             },
             b.xor(&c)
         );
         assert_eq!(
             Base16 {
-                bytes: vec![0u8, 10u8, 10u8]
+                be_bytes: vec![0u8, 10u8, 10u8]
             },
             c.xor(&b)
         );
@@ -202,56 +214,86 @@ mod tests {
     #[test]
     fn test_base16_xor_numbers() {
         assert!(Base16::xor_numbers(vec![]).is_err());
-        assert!(Base16::xor_numbers(vec![Base16 { bytes: vec![0u8] }]).is_ok());
+        assert!(Base16::xor_numbers(vec![Base16 {
+            be_bytes: vec![0u8]
+        }])
+        .is_ok());
         assert_eq!(
-            Base16 { bytes: vec![0u8] },
-            Base16::xor_numbers(vec![Base16 { bytes: vec![0u8] }]).unwrap()
+            Base16 {
+                be_bytes: vec![0u8]
+            },
+            Base16::xor_numbers(vec![Base16 {
+                be_bytes: vec![0u8]
+            }])
+            .unwrap()
         );
         // identity
         assert_eq!(
-            Base16 { bytes: vec![10u8] },
+            Base16 {
+                be_bytes: vec![10u8]
+            },
             Base16::xor_numbers(vec![
-                Base16 { bytes: vec![0u8] },
-                Base16 { bytes: vec![10u8] }
+                Base16 {
+                    be_bytes: vec![0u8]
+                },
+                Base16 {
+                    be_bytes: vec![10u8]
+                }
             ])
             .unwrap()
         );
         // self inverse
         assert_eq!(
-            Base16 { bytes: vec![0u8] },
+            Base16 {
+                be_bytes: vec![0u8]
+            },
             Base16::xor_numbers(vec![
-                Base16 { bytes: vec![10u8] },
-                Base16 { bytes: vec![10u8] }
+                Base16 {
+                    be_bytes: vec![10u8]
+                },
+                Base16 {
+                    be_bytes: vec![10u8]
+                }
             ])
             .unwrap()
         );
         assert_eq!(
-            Base16 { bytes: vec![10u8] },
+            Base16 {
+                be_bytes: vec![10u8]
+            },
             Base16::xor_numbers(vec![
-                Base16 { bytes: vec![10u8] },
-                Base16 { bytes: vec![10u8] },
-                Base16 { bytes: vec![10u8] }
+                Base16 {
+                    be_bytes: vec![10u8]
+                },
+                Base16 {
+                    be_bytes: vec![10u8]
+                },
+                Base16 {
+                    be_bytes: vec![10u8]
+                }
             ])
             .unwrap()
         );
 
         assert_eq!(
             Base16 {
-                bytes: vec![10u8, 0u8, 10u8]
+                be_bytes: vec![10u8, 0u8, 10u8]
             },
             Base16::xor_numbers(vec![
-                Base16 { bytes: vec![10u8] },
                 Base16 {
-                    bytes: vec![10u8, 0u8]
+                    be_bytes: vec![10u8]
                 },
                 Base16 {
-                    bytes: vec![10u8, 0u8]
+                    be_bytes: vec![10u8, 0u8]
                 },
                 Base16 {
-                    bytes: vec![10u8, 10u8]
+                    be_bytes: vec![10u8, 0u8]
                 },
                 Base16 {
-                    bytes: vec![10u8, 10u8, 10u8]
+                    be_bytes: vec![10u8, 10u8]
+                },
+                Base16 {
+                    be_bytes: vec![10u8, 10u8, 10u8]
                 }
             ])
             .unwrap()
