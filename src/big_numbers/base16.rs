@@ -38,8 +38,28 @@ impl Base16 {
         let max_bytes = self.be_bytes.len().max(other.be_bytes.len());
         let mut bytes = Vec::with_capacity(max_bytes);
         match xor_strategy {
-            XorStrategy::Repeating => {}
-            XorStrategy::Truncating => {}
+            XorStrategy::Repeating => {
+                for i in 0..max_bytes {
+                    let mut byte = 0;
+                    if self.be_bytes.len() <= i {
+                        byte = other.be_bytes[i]
+                            ^ self.be_bytes[i % self.be_bytes.len()];
+                    } else {
+                        byte = other.be_bytes[i % other.be_bytes.len()]
+                            ^ self.be_bytes[i];
+                    }
+                    bytes.push(byte);
+                }
+            }
+            XorStrategy::Truncating => {
+                for i in 0..max_bytes {
+                    if self.be_bytes.len() <= i || other.be_bytes.len() < i {
+                        break;
+                    } else {
+                        bytes.push(self.be_bytes[i] ^ other.be_bytes[i]);
+                    }
+                }
+            }
             XorStrategy::PadWithZero | XorStrategy::PadWithOne => {
                 for i in 0..max_bytes {
                     let mut byte = if *xor_strategy == XorStrategy::PadWithOne {
