@@ -3,6 +3,13 @@ use std::error::Error;
 
 use super::remove_leading_zeros;
 
+pub enum XorStrategy {
+    Repeating,
+    Truncating,
+    PadWithOne,
+    PadWithZero,
+}
+
 #[derive(Clone, Debug)]
 pub struct Base16 {
     /// bytes stored in a big endian order
