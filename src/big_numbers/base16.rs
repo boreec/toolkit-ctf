@@ -19,6 +19,7 @@ impl Base16 {
         Ok(())
     }
 
+    /// return inner bytes in a lower endian order
     pub fn as_le_bytes(&self) -> Vec<u8> {
         let mut bytes = self.bytes.clone();
         bytes.reverse();
