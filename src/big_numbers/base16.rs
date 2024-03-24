@@ -215,37 +215,23 @@ mod tests {
     }
 
     #[test]
-    fn test_base16_xor() {
-        // identity
-        let a = Base16 {
-            be_bytes: vec![10u8],
-        };
-        let zero = Base16 {
-            be_bytes: vec![0u8],
-        };
-        assert_eq!(a, a.xor(&zero));
+    fn test_base16_xor_truncating() {
+        todo!();
+    }
 
-        // self inverse
-        assert_eq!(zero, a.xor(&a));
+    #[test]
+    fn test_base16_xor_repeating() {
+        todo!();
+    }
 
-        let b = Base16 {
-            be_bytes: vec![10u8, 0u8, 10u8],
-        };
-        let c = Base16 {
-            be_bytes: vec![10u8, 10u8],
-        };
-        assert_eq!(
-            Base16 {
-                be_bytes: vec![0u8, 10u8, 10u8]
-            },
-            b.xor(&c)
-        );
-        assert_eq!(
-            Base16 {
-                be_bytes: vec![0u8, 10u8, 10u8]
-            },
-            c.xor(&b)
-        );
+    #[test]
+    fn test_base16_xor_pad_with_zero() {
+        todo!();
+    }
+
+    #[test]
+    fn test_base16_xor_pad_with_one() {
+        todo!();
     }
 
     #[test]
