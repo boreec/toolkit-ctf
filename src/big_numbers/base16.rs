@@ -3,11 +3,16 @@ use std::error::Error;
 
 use super::remove_leading_zeros;
 
+/// strategy to apply when xoring byte vectors
 #[derive(PartialEq, Eq)]
 pub enum XorStrategy {
+    /// xor byte vectors, repeating the smallest one if the size differ
     Repeating,
+    /// xor byte vectors, truncating the longest one if the size differ
     Truncating,
+    /// xor byte vectors, padding the smallest one with 1s if the size differ
     PadWithOne,
+    /// xor byte vectors, padding the smallest one with 0s if the size differ
     PadWithZero,
 }
 
