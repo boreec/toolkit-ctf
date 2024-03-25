@@ -233,7 +233,20 @@ mod tests {
 
     #[test]
     fn test_base16_xor_repeating() {
-        todo!();
+        let a = Base16 {
+            be_bytes: vec![10u8],
+        };
+
+        let b = Base16 {
+            be_bytes: vec![0u8, 0u8, 0u8],
+        };
+
+        assert_eq!(
+            Base16 {
+                be_bytes: vec![10u8; 3]
+            },
+            a.xor(&b, &XorStrategy::Repeating)
+        );
     }
 
     #[test]
