@@ -252,6 +252,20 @@ mod tests {
             },
             a.xor(&b, &XorStrategy::Repeating)
         );
+
+        let c = Base16 {
+            be_bytes: vec![0u8, 1u8, 2u8, 3u8, 4u8],
+        };
+
+        let d = Base16 {
+            be_bytes: vec![0u8; 13],
+        };
+
+        let expected = Base16 {
+            be_bytes: vec![0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2],
+        };
+
+        assert_eq!(expected, c.xor(&d, &XorStrategy::Repeating));
     }
 
     #[test]
