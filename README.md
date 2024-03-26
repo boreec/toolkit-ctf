@@ -12,6 +12,7 @@ cargo build --examples
 cargo run --example base16
 cargo run --example passphrase
 cargo run --example primality
+cargo run --example crypto_hack
 ```
 
 # data
