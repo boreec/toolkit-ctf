@@ -39,6 +39,7 @@ impl Base16 {
         bytes
     }
 
+    /// Creates a `Base16` from a lower endian vector of bytes.
     pub fn from_le_bytes(bytes: Vec<u8>) -> Self {
         let mut tmp = bytes;
         tmp.reverse();
