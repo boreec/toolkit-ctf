@@ -5,6 +5,7 @@ use super::remove_leading_zeros;
 /// Represents a number in base 10.
 #[derive(Debug)]
 pub struct Base10 {
+    /// bytes stored in a big endian order
     pub be_bytes: Vec<u8>,
 }
 
