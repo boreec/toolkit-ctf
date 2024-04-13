@@ -5,7 +5,7 @@ use super::remove_leading_zeros;
 /// Represents a number in base 10.
 #[derive(Debug)]
 pub struct Base10 {
-    pub bytes: Vec<u8>,
+    pub be_bytes: Vec<u8>,
 }
 
 impl Base10 {
@@ -21,12 +21,12 @@ impl Base10 {
 
 impl PartialEq for Base10 {
     fn eq(&self, other: &Self) -> bool {
-        if self.bytes.len() != other.bytes.len() {
+        if self.be_bytes.len() != other.be_bytes.len() {
             return false;
         }
 
-        for i in 0..self.bytes.len() {
-            if self.bytes[i] != other.bytes[i] {
+        for i in 0..self.be_bytes.len() {
+            if self.be_bytes[i] != other.be_bytes[i] {
                 return false;
             }
         }
@@ -40,11 +40,15 @@ impl TryFrom<&str> for Base10 {
 
     fn try_from(decimal_string: &str) -> Result<Self, Box<dyn Error>> {
         if decimal_string.is_empty() {
-            return Ok(Self { bytes: Vec::new() });
+            return Ok(Self {
+                be_bytes: Vec::new(),
+            });
         }
 
         if decimal_string == "0" {
-            return Ok(Self { bytes: vec![0u8] });
+            return Ok(Self {
+                be_bytes: vec![0u8],
+            });
         }
 
         Base10::validate_decimal_string(decimal_string)?;
@@ -63,7 +67,7 @@ impl TryFrom<&str> for Base10 {
 
         bytes.reverse();
 
-        Ok(Self { bytes })
+        Ok(Self { be_bytes: bytes })
     }
 }
 
@@ -86,16 +90,16 @@ mod tests {
     fn test_try_from_string() {
         assert!(Base10::try_from("0").is_ok());
         assert!(Base10::try_from("adjsakjdlas").is_err());
-        assert_eq!(vec![0u8], Base10::try_from("0").unwrap().bytes);
-        assert_eq!(vec![255u8], Base10::try_from("255").unwrap().bytes);
-        assert_eq!(vec![0u8, 1u8], Base10::try_from("256").unwrap().bytes);
-        assert_eq!(vec![1u8, 1u8], Base10::try_from("257").unwrap().bytes);
-        assert_eq!(vec![0u8, 2u8], Base10::try_from("512").unwrap().bytes);
-        assert_eq!(vec![1u8, 2u8], Base10::try_from("513").unwrap().bytes);
-        assert_eq!(vec![9u8, 3u8], Base10::try_from("777").unwrap().bytes);
+        assert_eq!(vec![0u8], Base10::try_from("0").unwrap().be_bytes);
+        assert_eq!(vec![255u8], Base10::try_from("255").unwrap().be_bytes);
+        assert_eq!(vec![0u8, 1u8], Base10::try_from("256").unwrap().be_bytes);
+        assert_eq!(vec![1u8, 1u8], Base10::try_from("257").unwrap().be_bytes);
+        assert_eq!(vec![0u8, 2u8], Base10::try_from("512").unwrap().be_bytes);
+        assert_eq!(vec![1u8, 2u8], Base10::try_from("513").unwrap().be_bytes);
+        assert_eq!(vec![9u8, 3u8], Base10::try_from("777").unwrap().be_bytes);
         assert_eq!(
             vec![0u8, 0u8, 1u8],
-            Base10::try_from("65536").unwrap().bytes
+            Base10::try_from("65536").unwrap().be_bytes
         );
     }
 }

@@ -148,7 +148,7 @@ impl PartialEq for Base16 {
 impl From<Base10> for Base16 {
     fn from(decimal_number: Base10) -> Self {
         Self {
-            be_bytes: decimal_number.bytes,
+            be_bytes: decimal_number.be_bytes,
         }
     }
 }
