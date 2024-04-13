@@ -41,9 +41,9 @@ impl Base16 {
 
     /// Creates a `Base16` from a lower endian vector of bytes.
     pub fn from_le_bytes(bytes: Vec<u8>) -> Self {
-        let mut tmp = bytes;
-        tmp.reverse();
-        Self { be_bytes: tmp }
+        Self {
+            be_bytes: bytes.into_iter().rev().collect(),
+        }
     }
 
     pub fn xor(&self, other: &Self, xor_strategy: &XorStrategy) -> Self {
