@@ -46,6 +46,8 @@ impl Base16 {
         }
     }
 
+    /// Performs the xor operation between the current `Base16` number and
+    /// another one by using a specific `XorStrategy`.
     pub fn xor(&self, other: &Self, xor_strategy: &XorStrategy) -> Self {
         let max_bytes = self.be_bytes.len().max(other.be_bytes.len());
         let mut bytes = Vec::with_capacity(max_bytes);
