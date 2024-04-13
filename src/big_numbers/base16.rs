@@ -51,7 +51,7 @@ impl Base16 {
         match xor_strategy {
             XorStrategy::Repeating => {
                 for i in 0..max_bytes {
-                    let mut byte = 0;
+                    let byte;
                     if self.be_bytes.len() <= i {
                         byte = other.be_bytes[i]
                             ^ self.be_bytes[i % self.be_bytes.len()];
