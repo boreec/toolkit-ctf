@@ -39,6 +39,12 @@ impl Base16 {
         bytes
     }
 
+    pub fn from_le_bytes(bytes: Vec<u8>) -> Self {
+        let mut tmp = bytes;
+        tmp.reverse();
+        Self { be_bytes: tmp }
+    }
+
     pub fn xor(&self, other: &Self, xor_strategy: &XorStrategy) -> Self {
         let max_bytes = self.be_bytes.len().max(other.be_bytes.len());
         let mut bytes = Vec::with_capacity(max_bytes);

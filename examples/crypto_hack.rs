@@ -90,12 +90,9 @@ fn xorkey1() {
     let secret = "0e0b213f26041e480b26217f27342e175d0e070a3c5b103e2526217f27342e175d0e077e263451150104";
     let secret_b16 = Base16::try_from(secret).unwrap();
     let secret_bytes = secret_b16.as_le_bytes();
-    let mut flag_bytes = b"crypto{".to_vec();
-    flag_bytes.reverse();
-    let xor_partial_key = Base16 {
-        be_bytes: flag_bytes.clone(),
-    }
-    .xor(&secret_b16, &XorStrategy::Repeating);
+    let flag_bytes = b"crypto{".to_vec();
+    let xor_partial_key = Base16::from_le_bytes(flag_bytes.clone())
+        .xor(&secret_b16, &XorStrategy::Repeating);
     let partial_key =
         convert_ascii_integers_to_chars(xor_partial_key.as_le_bytes());
     let partial_key_str =
@@ -113,12 +110,7 @@ fn xorkey1() {
         i += 1;
     }
 
-    let mut bytes = complete_key.into_bytes();
-    bytes.reverse();
-    let complete_key_b16 = Base16 {
-        be_bytes: bytes.to_vec(),
-    };
-
+    let complete_key_b16 = Base16::from_le_bytes(complete_key.into_bytes());
     let xor = complete_key_b16.xor(&secret_b16, &XorStrategy::Repeating);
     let chars = convert_ascii_integers_to_chars(xor.as_le_bytes());
     println!("xorkey1: {:?}", chars.iter().collect::<String>());
