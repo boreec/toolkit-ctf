@@ -23,6 +23,8 @@ pub struct Base16 {
 }
 
 impl Base16 {
+    /// Validates a given string representing a hexadecimal number. The string
+    /// is considered valid if it contains only hexadecimal digits.
     pub fn validate_hex_string(hex_string: &str) -> Result<(), String> {
         for c in hex_string.chars() {
             if !c.is_ascii_hexdigit() {
