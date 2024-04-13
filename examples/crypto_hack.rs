@@ -69,7 +69,7 @@ fn xorkey0() {
     let b16 = Base16::try_from(hex_string).unwrap();
     let mut decoded = String::new();
     let mut i = 0u8;
-    while i <= 255u8 && !decoded.contains("crypto{") {
+    while i != 255u8 && !decoded.contains("crypto{") {
         let xor = b16.xor(
             &Base16 {
                 be_bytes: vec![i; hex_string.len() / 2],
