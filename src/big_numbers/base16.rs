@@ -16,6 +16,7 @@ pub enum XorStrategy {
     PadWithZero,
 }
 
+/// Represents a number in Base 16.
 #[derive(Clone, Debug)]
 pub struct Base16 {
     /// bytes stored in a big endian order
