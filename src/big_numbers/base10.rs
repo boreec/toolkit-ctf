@@ -10,6 +10,8 @@ pub struct Base10 {
 }
 
 impl Base10 {
+    /// Validates a string representing a decimal number. The string is
+    /// considered valid if it contains only decimal digits.
     pub fn validate_decimal_string(decimal_string: &str) -> Result<(), String> {
         for c in decimal_string.chars() {
             if !c.is_digit(10u32) {
