@@ -2,6 +2,7 @@ use std::error::Error;
 
 use super::remove_leading_zeros;
 
+/// Represents a number in base 10.
 #[derive(Debug)]
 pub struct Base10 {
     pub bytes: Vec<u8>,
