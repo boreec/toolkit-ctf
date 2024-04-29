@@ -10,6 +10,7 @@ const BASE_64_CHARS: &[char] = &[
     '8', '9', '+', '/',
 ];
 
+/// Represents the character used for padding base 64 numbers.
 const BASE_64_PAD: char = '=';
 
 pub struct Base64 {
