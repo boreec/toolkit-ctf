@@ -15,7 +15,7 @@ const BASE_64_PAD: char = '=';
 
 /// Represents a base 64 number of any length.
 pub struct Base64 {
-    bytes: Vec<u8>,
+    be_bytes: Vec<u8>,
 }
 
 impl Base64 {
@@ -36,16 +36,16 @@ impl Base64 {
 
 impl PartialEq for Base64 {
     fn eq(&self, other: &Self) -> bool {
-        if self.bytes.len() != other.bytes.len() {
+        if self.be_bytes.len() != other.be_bytes.len() {
             return false;
         }
 
         let mut i = 0;
-        while i < self.bytes.len() && self.bytes[i] == other.bytes[i] {
+        while i < self.be_bytes.len() && self.be_bytes[i] == other.be_bytes[i] {
             i += 1;
         }
 
-        i >= self.bytes.len()
+        i >= self.be_bytes.len()
     }
 }
 
@@ -56,7 +56,7 @@ impl TryFrom<&str> for Base64 {
         Base64::validate_base64_string(value)?;
 
         Ok(Self {
-            bytes: BASE64_STANDARD.decode(value)?,
+            be_bytes: BASE64_STANDARD.decode(value)?,
         })
     }
 }
@@ -65,7 +65,7 @@ impl Into<String> for Base64 {
     fn into(self) -> String {
         let mut result = String::new();
 
-        for chunk in self.bytes.chunks(3) {
+        for chunk in self.be_bytes.chunks(3) {
             let mut num = 0u32;
 
             for (i, &byte) in chunk.iter().enumerate() {
@@ -104,13 +104,16 @@ mod tests {
 
     #[test]
     fn test_try_from_string() {
-        assert_eq!(Vec::<u8>::new(), Base64::try_from("").unwrap().bytes);
-        assert_eq!(vec![65u8], Base64::try_from("QQ==").unwrap().bytes);
-        assert_eq!(vec![90u8], Base64::try_from("Wg==").unwrap().bytes);
-        assert_eq!(vec![65u8, 66u8], Base64::try_from("QUI=").unwrap().bytes);
+        assert_eq!(Vec::<u8>::new(), Base64::try_from("").unwrap().be_bytes);
+        assert_eq!(vec![65u8], Base64::try_from("QQ==").unwrap().be_bytes);
+        assert_eq!(vec![90u8], Base64::try_from("Wg==").unwrap().be_bytes);
+        assert_eq!(
+            vec![65u8, 66u8],
+            Base64::try_from("QUI=").unwrap().be_bytes
+        );
         assert_eq!(
             vec![65u8, 66u8, 67u8],
-            Base64::try_from("QUJD").unwrap().bytes
+            Base64::try_from("QUJD").unwrap().be_bytes
         );
     }
 }
