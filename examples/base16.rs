@@ -14,4 +14,7 @@ fn main() {
 
     let simplified_hex_string = remove_leading_zeros(hex_string);
     println!("simplified hex_string: {}", simplified_hex_string);
+
+    let b16 = Base16::try_from(simplified_hex_string.as_str()).unwrap();
+    println!("hex_string as big-endian bytes: {:?}", b16.be_bytes);
 }
