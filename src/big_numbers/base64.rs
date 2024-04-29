@@ -13,6 +13,7 @@ const BASE_64_CHARS: &[char] = &[
 /// Represents the character used for padding base 64 numbers.
 const BASE_64_PAD: char = '=';
 
+/// Represents a base 64 number of any length.
 pub struct Base64 {
     bytes: Vec<u8>,
 }
