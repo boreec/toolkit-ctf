@@ -1,6 +1,7 @@
 use base64::prelude::*;
 use std::error::Error;
 
+/// Represents all available chars for base 64 numbers.
 const BASE_64_CHARS: &[char] = &[
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
     'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
