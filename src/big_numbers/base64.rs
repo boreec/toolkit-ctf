@@ -19,6 +19,7 @@ pub struct Base64 {
 }
 
 impl Base64 {
+    /// Validates a string representing a base64 number.
     pub fn validate_base64_string(base64_string: &str) -> Result<(), String> {
         if base64_string.len() % 4 != 0 {
             return Err(
